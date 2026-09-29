@@ -72,9 +72,10 @@ MODULE_FILES = [
     "category_engine.py",
     "skill_orchestrator.py",
     "skill_derived_profile.py",
+    "object_segmentation.py",
 ]
 
-PAYLOAD_VERSION = "v23-strict-1"
+PAYLOAD_VERSION = "v24-seg-1"
 HOOK_VERSION = "taaf-stepenv-1"
 
 

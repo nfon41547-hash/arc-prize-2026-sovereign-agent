@@ -42,7 +42,7 @@
       "source_module": "arc3sdk/algebraic_planning_engine.py"
     },
     {
-      "sha256": "c39dcd7e5fc548225180d5ea2d4a591e3719572d11e120bcd6783677921dba76",
+      "sha256": "124aa8b58887b17845afeeceea5fde7119a932f906db25014c73c97c1e4ca8d7",
       "source_module": "arc3sdk/fusion_supremacy.py"
     },
     {
@@ -112,8 +112,12 @@
     {
       "sha256": "d8df36b698f76dfb4171679a38c1de9c45c3bfd92a2988b125b3c7f9258c6ed9",
       "source_module": "arc3sdk/skill_orchestrator.py"
+    },
+    {
+      "sha256": "20b94ab10a366b40afce504bd09936e72a4e78d87814cf71aa7485b6b88d2956",
+      "source_module": "arc3sdk/object_segmentation.py"
     }
   ],
-  "payload_version": "v23-strict-1",
+  "payload_version": "v24-seg-1",
   "schema": "arc3.release-manifest.v1"
 }

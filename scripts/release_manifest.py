@@ -41,6 +41,7 @@ MODULES = (
     "sim.py",
     "category_engine.py",
     "skill_orchestrator.py",
+    "object_segmentation.py",
 )
 
 

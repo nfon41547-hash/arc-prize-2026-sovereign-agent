@@ -220,15 +220,38 @@ def objects(grid: Any) -> list[dict[str, Any]]:
                 "bbox": (min(ys), min(xs), max(ys), max(xs)),
                 "children": [],
             })
-        # containment: bbox strictly contains bbox (conservative, cheap)
-        for i, a in enumerate(out):
-            for j, b in enumerate(out):
-                if i == j:
+        # exact topological children (object_segmentation, complement
+        # flood-fill) mapped onto fusion order via (color, top-left);
+        # bbox fallback only if the mapping misses (never raises).
+        try:
+            from .object_segmentation import segment as _seg
+            _sn = _seg(g)["nodes"]
+            _by_tl: dict = {}
+            for _nd in _sn:
+                try:
+                    _by_tl[(int(_nd["color"]), int(_nd["start"][0]),
+                            int(_nd["start"][1]))] = int(_nd["id"])
+                except Exception:
                     continue
-                if (a["bbox"][0] < b["bbox"][0] and a["bbox"][1] < b["bbox"][1]
-                        and a["bbox"][2] > b["bbox"][2] and a["bbox"][3] > b["bbox"][3]):
-                    if len(a["children"]) < 16:
-                        a["children"].append(j)
+            _f2s: list = []
+            for comp in comps:
+                try:
+                    _tl = min(comp["cells"])
+                    _key = (int(comp["color"]), int(_tl[0]), int(_tl[1]))
+                    _f2s.append(_by_tl.get(_key))
+                except Exception:
+                    _f2s.append(None)
+            _s2f = {s: i for i, s in enumerate(_f2s) if s is not None}
+            _seg_children = {int(_nd["id"]): list(_nd.get("children", []))
+                             for _nd in _sn}
+            for i, a in enumerate(out):
+                s = _f2s[i]
+                if s is None or s not in _seg_children:
+                    continue
+                exact = [_s2f[c] for c in _seg_children[s] if c in _s2f]
+                a["children"] = [c for c in exact[:16]]
+        except Exception:
+            pass
         return out[:_MAX_COMP]
     except Exception:
         return []
