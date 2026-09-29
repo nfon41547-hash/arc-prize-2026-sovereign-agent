@@ -1,0 +1,29 @@
+{
+  "title": "arc-agi-3-27b-ab",
+  "code_file": "arc-agi-3-27b-ab.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu"
+  ],
+  "dataset_sources": [
+    "bang1850/arc3-sovereign-team-data",
+    "bang1850/arc3sdk-runtime-v32-hardening",
+    "keithtyser/duck-qwen38-nvfp4-mtp-vllm-smoke-v1",
+    "keithtyser/qwen38-flash-next-vllm-nvfp4-runtime-v1",
+    "bang1850/arc3-27b-boot"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-3"
+  ],
+  "model_sources": [
+    "mikedan7/qwen3-8-27b-fp8-official/PyTorch/hf-fp8/1"
+  ],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:57e612b484cf3df5026ee4dcc3cb176974b22b2bc0937fb1e16132a8be4cb13c",
+  "machine_shape": "NvidiaRtxPro6000"
+}

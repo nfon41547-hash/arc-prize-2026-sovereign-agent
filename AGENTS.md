@@ -75,6 +75,21 @@ kaggle datasets version -p dataset_patch -m "<msg>" --dir-mode zip
 - Honest numbers only: verified log/test numbers, never fabricated claims.
 - 1 competition submission/day. No git remote (local repo only).
 
+## A/B track: 27B dense-FP8 arm (authorized 2026-09-29, fork phase)
+- Model: `mikedan7/qwen3-8-27b-fp8-official/PyTorch/hf-fp8/1` (official
+  mirror, pinned revision, Apache 2.0 — verified via instances get).
+- Serving is NOT a config flip: keithtyser `serving_setup.py` is hardcoded
+  for Flash-Next (custom image, PLE patch, MTP). Own boot supervisor in
+  `serving_27b/` (clean-room, stdlib; stock vLLM, MTP off). Bundle license
+  is registry-unknown (embedded MIT claim unverified) -> attach, never copy.
+- Variant is GENERATED: `scripts/make_ab_variant.py` (profile MTP 3->0,
+  watchdog boot -> ab27 boot; vendor cell passes through). Outputs:
+  `starter_push_ab/` (notebook + metadata, no id) and `dataset_27b/`
+  staging (byte-identical to `serving_27b/`). Tests: `test_ab_variant.py`.
+- Push order (each needs explicit user order; quota 1 submission/day):
+  1. boot dataset (`dataset_27b`), 2. variant kernel (`starter_push_ab`).
+  First Kaggle boot is the experiment (31GB fits no local GPU).
+
 ## Environment facts
 - Competition runs on Kaggle ONLY. Local machine is dev/test (RTX 3090).
 - Heavy/data trees are git-ignored. reference_kernels/ holds third-party
