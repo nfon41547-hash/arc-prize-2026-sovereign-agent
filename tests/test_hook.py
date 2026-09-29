@@ -259,6 +259,29 @@ def test_consensus_import_failure_diagnosed_once(monkeypatch, capsys):
         p.stop()
 
 
+def test_shadow_denied_records_would_be():
+    """Shadow mode: denied tier logs count + mean-conf + would-be action.
+
+    Behavior-neutral (analyzer still acts); the phi artifact carries the
+    calibration evidence a future allowlist decision must cite.
+    """
+    rec, p = _install({"action": 2, "confidence": 0.9,
+                       "reason": "causal_chain_argmax"})
+    try:
+        s = _FakeSession(_grid())
+        s.step_env({"action": "UP"})
+        assert rec["args"] == {"action": "UP"}
+        ent = th._DENIED.get("causal_chain_argmax")
+        assert isinstance(ent, list) and ent[0] >= 1
+        assert abs(ent[1] / ent[0] - 0.9) < 1e-9
+        pend = cphi.shared()._pending.get("zz99-test")
+        assert pend is not None
+        dec = str(pend.get("decision", ""))
+        assert "denied:causal_chain_argmax:would2@0.90" in dec
+    finally:
+        p.stop()
+
+
 def test_never_raises_fuzz(monkeypatch):
     import arc3sdk.unified_consensus_engine as uce
 

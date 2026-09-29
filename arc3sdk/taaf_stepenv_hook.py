@@ -71,7 +71,7 @@ _MAX_TELEMETRY_GAMES = 64
 _SUB_ALLOW_DEFAULT = ("ape", "leap_photographic", "leap_q",
                       "agno_offline_bfs_shortest_path")
 
-_DENIED: dict[str, int] = {}
+_DENIED: dict[str, list] = {}
 
 
 def _sub_allow_list() -> tuple:
@@ -96,12 +96,27 @@ def _sub_allowed(reason: Any) -> bool:
         return False
 
 
-def _note_denied(reason: Any) -> None:
-    """Bounded counter of denied substitutions (for the next autopsy)."""
+def _note_denied(reason: Any, conf: Any = None) -> None:
+    """Shadow-mode telemetry: count + confidence mass per denied reason.
+
+    No behavior change: the analyzer still acts. The (count, mean-conf)
+    pairs plus the would-be action recorded in the phi artifact are the
+    calibration evidence a future allowlist decision must cite.
+    """
     try:
         with _LOCK:
             key = str(reason or "unknown")[:48]
-            _DENIED[key] = _DENIED.get(key, 0) + 1
+            try:
+                c = float(conf)  # type: ignore[arg-type]
+            except Exception:
+                c = None
+            ent = _DENIED.get(key)
+            if not isinstance(ent, list) or len(ent) != 2:
+                ent = [0, 0.0]
+            ent[0] += 1
+            if c is not None and 0.0 <= c <= 1.0:
+                ent[1] += c
+            _DENIED[key] = ent
             while len(_DENIED) > 32:
                 _DENIED.pop(next(iter(_DENIED)))
     except Exception:
@@ -395,8 +410,16 @@ def _phi_summary_note(game_id: str, art: dict[str, Any] | None) -> None:
         m = _phi_shared().metrics(game_id)
         try:
             with _LOCK:
-                _den = sorted(_DENIED.items(), key=lambda kv: -kv[1])[:3]
-                _den_s = ",".join(f"{k}={v}" for k, v in _den)
+                _den = sorted(_DENIED.items(),
+                              key=lambda kv: -(kv[1][0] if isinstance(kv[1], list) else 0))[:3]
+                parts = []
+                for k, v in _den:
+                    try:
+                        n, s = int(v[0]), float(v[1])
+                        parts.append(f"{k}={n}@{s / n:.2f}" if n else f"{k}={n}")
+                    except Exception:
+                        parts.append(f"{k}={v}")
+                _den_s = ",".join(parts)
         except Exception:
             _den_s = ""
         print(f">>> [SOVEREIGN-OPTIMIZER] phi-summary game={game_id} "
@@ -512,18 +535,24 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
         _reason = out.get("reason", "")
         # v28 strict substitution: statistical tiers never override.
         if not _sub_allowed(_reason):
-            _note_denied(_reason)
+            _note_denied(_reason, conf)
             try:
                 if _phi_enabled():
                     from .cass_phi import shared as _phi_shared2
                     from .cass_phi import state_fp as _state_fp2
                     _aid0, _ax0, _ay0 = _parse_requested(arguments)
+                    try:
+                        _wid, _, _ = _parse_requested(args)
+                    except Exception:
+                        _wid = None
                     _phi_shared2().observe_turn(
                         obs.game_id, obs.level, _state_fp2(obs.grid.tobytes()),
                         obs.grid.tobytes(), obs.grid.shape[0], obs.grid.shape[1],
                         _aid0, _ax0, _ay0, None, "analyzer",
                         legal=obs.available_actions, tau=_gate,
-                        decision="denied:%s" % str(_reason)[:48])
+                        decision="denied:%s:would%s@%.2f" % (
+                            str(_reason)[:32], str(_wid)[:8],
+                            round(float(conf), 4)))
             except Exception:
                 pass
             return orig(session, arguments)
@@ -639,6 +668,7 @@ def reset_telemetry() -> None:
     try:
         with _LOCK:
             _TELEMETRY.clear()
+            _DENIED.clear()
             _ROUND_EMA.clear()
             _ROUND_LAST.clear()
     except Exception:

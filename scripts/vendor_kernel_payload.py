@@ -75,7 +75,7 @@ MODULE_FILES = [
     "object_segmentation.py",
 ]
 
-PAYLOAD_VERSION = "v24-seg-1"
+PAYLOAD_VERSION = "v25-shadow-1"
 HOOK_VERSION = "taaf-stepenv-1"
 
 

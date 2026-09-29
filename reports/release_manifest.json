@@ -46,7 +46,7 @@
       "source_module": "arc3sdk/fusion_supremacy.py"
     },
     {
-      "sha256": "c3770b7f2412543ef177e3f7ece6662f07520287dbdc2dd01458e0638e5c7701",
+      "sha256": "764489371058508623d0ac2b1807b86ef2d79d0c70ab4b05963e93b9fc5458a4",
       "source_module": "arc3sdk/taaf_stepenv_hook.py"
     },
     {
@@ -118,6 +118,6 @@
       "source_module": "arc3sdk/object_segmentation.py"
     }
   ],
-  "payload_version": "v24-seg-1",
+  "payload_version": "v25-shadow-1",
   "schema": "arc3.release-manifest.v1"
 }
