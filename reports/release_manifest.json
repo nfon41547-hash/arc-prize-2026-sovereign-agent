@@ -1,0 +1,119 @@
+{
+  "hook_version": "taaf-stepenv-1",
+  "modules": [
+    {
+      "sha256": "2497858c4e1c28332952b4cd9b07649776b431ca8a890290d6102b86a3fd850e",
+      "source_module": "arc3sdk/v32_hardening.py"
+    },
+    {
+      "sha256": "abaf1367811fc8a8ed000da45080d50072b423844027c64270714346a79bf289",
+      "source_module": "arc3sdk/offline_guard.py"
+    },
+    {
+      "sha256": "b19953ad53522c7eb3daa1754602ca9ae4ea1280d1d76563d4ef398402c8c528",
+      "source_module": "arc3sdk/exploration_registry.py"
+    },
+    {
+      "sha256": "4b10e336e6c7a4f09731cc787f83e3a69d722c206719d726d766379457a38499",
+      "source_module": "arc3sdk/competition_contract.py"
+    },
+    {
+      "sha256": "09ac6d08d6a9b8ba95db337474eb5cb83f153286567ac3eae003e9c92020af7f",
+      "source_module": "arc3sdk/egcd.py"
+    },
+    {
+      "sha256": "66e1971f493f2c72a2c2c490a4be4c9067b27c9dbb852c8b945d6a84e1769a7d",
+      "source_module": "arc3sdk/kaggle_native_adapter.py"
+    },
+    {
+      "sha256": "bb3c96d45676bded80fb6cb3c1a14fcbdd41973ff3e1e5b1d64e86ececf9c2b7",
+      "source_module": "arc3sdk/realtime_abstract_cortex.py"
+    },
+    {
+      "sha256": "c520d13f1a8238ff3779cef7fd7a89962eae0c2647214f77f7f896a116edd694",
+      "source_module": "arc3sdk/spectral_topological_reasoning.py"
+    },
+    {
+      "sha256": "0590e4e1b0480163d43a5ac7b666b9f133285648ead0704c4ae51d7553e141b9",
+      "source_module": "arc3sdk/causal_chain_reasoner.py"
+    },
+    {
+      "sha256": "a5a37d9f4147cd9421601354883e44e3f63cd124a232f25d0ee483f1a9ebb5ed",
+      "source_module": "arc3sdk/algebraic_planning_engine.py"
+    },
+    {
+      "sha256": "c39dcd7e5fc548225180d5ea2d4a591e3719572d11e120bcd6783677921dba76",
+      "source_module": "arc3sdk/fusion_supremacy.py"
+    },
+    {
+      "sha256": "c3770b7f2412543ef177e3f7ece6662f07520287dbdc2dd01458e0638e5c7701",
+      "source_module": "arc3sdk/taaf_stepenv_hook.py"
+    },
+    {
+      "sha256": "44fd1dd925679acda1469aeb6c84da33baf048e93cd5cfa3a4f63a0cb0680344",
+      "source_module": "arc3sdk/cass_phi.py"
+    },
+    {
+      "sha256": "a160c11b61ee3aa0cbfbe4b6e82f2bd3030f3fc0b66d6146ee3e5bbba748b7e4",
+      "source_module": "arc3sdk/unified_consensus_engine.py"
+    },
+    {
+      "sha256": "965287c679fd97f6d756cbd9a872bee6fbd8927c590a3ba1f180331079be29a0",
+      "source_module": "arc3sdk/sovereign_memory_vram.py"
+    },
+    {
+      "sha256": "c5a141925e010ca5820d7c24419554c172021bb044ce4995daf360f09fcaaf79",
+      "source_module": "arc3sdk/nvidia_dsl.py"
+    },
+    {
+      "sha256": "c291f2e048f2f8d9ecc73bc6e7205171afc67077511230c00f412f6dac22840a",
+      "source_module": "arc3sdk/mcts_planner.py"
+    },
+    {
+      "sha256": "6dc9005226e1ef328db6f04ef164ea9978ab4a8b97c343e003078f39dcaf408b",
+      "source_module": "arc3sdk/world_model_simulator.py"
+    },
+    {
+      "sha256": "5af632a617310e2b49d58fb0a1163cac0282d732971325f407de0f708cfc6afd",
+      "source_module": "arc3sdk/human_cognitive_perception.py"
+    },
+    {
+      "sha256": "ed5f1842c891e42a0142d967e3b18ba4c90fed7e4fe0d82fae693e99de2ee560",
+      "source_module": "arc3sdk/pure_abstract_axioms.py"
+    },
+    {
+      "sha256": "2c7047939eb0e5da5f3eb95bf2a1cb497ac6cd2d16eb0e07165a74b7d42f9e7d",
+      "source_module": "arc3sdk/skills.py"
+    },
+    {
+      "sha256": "cdb90915aae117f6cb5dee940dc325f36896b61162af4d711764c2a88830300f",
+      "source_module": "arc3sdk/rune.py"
+    },
+    {
+      "sha256": "d6dda5aa30232cd3460318371ebd79a7d64267a02eb86582940e678426ef5400",
+      "source_module": "arc3sdk/grid.py"
+    },
+    {
+      "sha256": "2d2a51438cc5d96aa696e06002924dd99ecf7012e2d7a1e51334f38f2cc46109",
+      "source_module": "arc3sdk/oracle.py"
+    },
+    {
+      "sha256": "4392a34e83db0c81655c9f50b0a17ef9d1bb730b9714a9f5a2c10d25712d938c",
+      "source_module": "arc3sdk/principles.py"
+    },
+    {
+      "sha256": "6c48671c7ae595e21bc30e644d1ecd3080e6bc014838abff582d88319bd0f93a",
+      "source_module": "arc3sdk/sim.py"
+    },
+    {
+      "sha256": "44699cc74c377a34d239ca1580ee11021a41442eb950a0245c1f9587d4a72e63",
+      "source_module": "arc3sdk/category_engine.py"
+    },
+    {
+      "sha256": "d8df36b698f76dfb4171679a38c1de9c45c3bfd92a2988b125b3c7f9258c6ed9",
+      "source_module": "arc3sdk/skill_orchestrator.py"
+    }
+  ],
+  "payload_version": "v23-strict-1",
+  "schema": "arc3.release-manifest.v1"
+}

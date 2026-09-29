@@ -1,0 +1,7 @@
+reference_kernels/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.npm-cache/
+node_modules/
