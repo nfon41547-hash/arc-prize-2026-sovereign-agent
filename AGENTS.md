@@ -36,6 +36,10 @@ kaggle datasets version -p dataset_patch -m "<msg>" --dir-mode zip
 ## Score history (public/private leaderboard, verified numbers only)
 - Best real: 3.68 (Duck-alone era). v24: 3.21, v25: 2.41 (both Duck-alone:
   tiers dead). v27: 0.37 (tiers live, harmful — see below).
+- v29 SUBMITTED 2026-09-29 as 56677771 (PENDING): offline public-25 8.76
+  (score.json), 2 tier-subs both allowlisted BFS-proof, top-3 denied
+  reasons alone sum to 2965 blocked statistical proposals (all with conf
+  recorded), consensus healthy, 0 consensus-unavailable.
 - Top board (2026-09): ~19.45. Our tiers target efficiency, not reasoning.
 
 ## v28 root causes (proven from v27 worker log: 75 tier-subs, 0 from proof)
