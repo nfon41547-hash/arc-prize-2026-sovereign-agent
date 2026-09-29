@@ -13,11 +13,18 @@ python -m kaggle kernels push -p starter_push --accelerator NvidiaRtxPro6000
 
 ## Dataset push (team runtime)
 ```
-kaggle datasets version -p <staging> -m "<msg>" --dir-mode zip
+kaggle datasets version -p dataset_patch -m "<msg>" --dir-mode zip
 ```
-- `--dir-mode zip` REQUIRED (preserves `arc3sdk/` subdir).
-- Windows CLI bug: move `PUSH_README.txt` out of staging before pushing,
-  restore after.
+- Staging layout is `dataset_patch/payload/arc3sdk/*.py` (+
+  `dataset-metadata.json` at root). The `payload/` wrapper is
+  load-bearing: the CLI zips each top-level subdir FLAT (entries
+  relative to the subdir), so only via the wrapper does `payload.zip`
+  carry the `arc3sdk/` prefix (mount: `<slug>/arc3sdk/*.py`). Verified
+  2026-09-29 against kaggle 2.2.4 source + remote zip inspection.
+- Windows CLI quirk: move `PUSH_README.txt` OUTSIDE staging before
+  pushing (a rename inside staging uploads the stray file), restore
+  after. `scripts/build_dataset_patch.py` is the single source of truth
+  for staging (byte-identical to the notebook vendor cell).
 
 ## Single source of truth
 - `scripts/vendor_kernel_payload.py` generates the notebook vendor cell from

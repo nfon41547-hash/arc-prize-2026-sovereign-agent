@@ -1,6 +1,10 @@
-"""Dataset patch builder (lean rebuild): stage arc3sdk overlay + worker-sim.
+"""Dataset patch builder (lean rebuild): stage payload/arc3sdk + worker-sim.
 
-Staging = dataset_patch/arc3sdk (payload files overlaid byte-identical).
+Staging = dataset_patch/payload/arc3sdk (payload files byte-identical to
+the notebook vendor cell). The wrapper level is load-bearing: the Kaggle
+CLI zips each top-level subdir FLAT, so dataset_patch/payload publishes
+payload.zip with the arc3sdk/ prefix intact (kernel mount:
+<slug>/arc3sdk/*.py).
 Worker-sim: in a scrubbed subprocess (cwd=tmp, no repo on path), exec the
 notebook vendor cell -> import the FULL hook->decide chain -> run one
 decide on a fake obs. WORKER_SIM_OK only if the chain resolves offline.
@@ -19,7 +23,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PATCH = ROOT / "dataset_patch" / "arc3sdk"
+PATCH = ROOT / "dataset_patch"
 
 # Worker import allowlist: every top-level import in every payload module
 # must be stdlib-from-this-list or numpy. Anything else (torch, cupy,
@@ -45,21 +49,38 @@ def _generator():
 
 
 def build() -> Path:
+    """Stage payload/arc3sdk (byte-identical to vendor cell); return WRAP.
+
+    Layout rationale (proven 2026-09-29 against kaggle 2.2.4 source +
+    remote zip inspection): the CLI zips each top-level subdir of -p
+    FLAT (DirectoryArchive: shutil.make_archive(base, fmt, subdir), so
+    entries are relative to the subdir, no prefix). Staging
+    dataset_patch/arc3sdk therefore published a flat zip. The single
+    wrapper level dataset_patch/payload/arc3sdk publishes payload.zip
+    whose entries carry the arc3sdk/ prefix, so the kernel mount lands
+    at <slug>/arc3sdk/*.py. Returns WRAP (the dir containing arc3sdk/)
+    so worker-sim exercises the same import root the mount provides.
+    """
     gen = _generator()
     payloads = gen.build_payloads()
-    if PATCH.exists():
-        shutil.rmtree(PATCH)
-    (PATCH / "arc3sdk").mkdir(parents=True)
-    (PATCH / "arc3sdk" / "cass_xi").mkdir(parents=True)
+    legacy = PATCH / "arc3sdk"
+    if legacy.exists():
+        shutil.rmtree(legacy)
+    wrap = PATCH / "payload"
+    pkg = wrap / "arc3sdk"
+    if wrap.exists():
+        shutil.rmtree(wrap)
+    pkg.mkdir(parents=True)
+    (pkg / "cass_xi").mkdir(parents=True)
     for name in payloads:
         if name == "__init__.py":
             # minimal package marker, same as vendor cell
-            (PATCH / "arc3sdk" / "__init__.py").write_bytes(
+            (pkg / "__init__.py").write_bytes(
                 b'"""Vendored arc3sdk runtime (dataset overlay)."""\n'
                 b'__version__ = "v32-vendored"\nVENDORED = True\n')
             continue
         src = ROOT / "arc3sdk" / name
-        dst = PATCH / "arc3sdk" / name
+        dst = pkg / name
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_bytes(src.read_bytes())
     (PATCH / "dataset-metadata.json").write_text(json.dumps({
@@ -72,8 +93,8 @@ def build() -> Path:
     # since the working copy shadows the mount).
     import ast as _ast
     _payload_names = set(_generator().MODULE_FILES) | {"__init__.py"}
-    for _p in sorted((PATCH / "arc3sdk").rglob("*.py")):
-        _rel = _p.relative_to(PATCH / "arc3sdk").as_posix()
+    for _p in sorted(pkg.rglob("*.py")):
+        _rel = _p.relative_to(pkg).as_posix()
         if _rel not in _payload_names:
             continue
         try:
@@ -91,7 +112,10 @@ def build() -> Path:
             _bad = _mods - WORKER_STDLIB_ALLOW - {"arc3sdk"}
             assert not _bad, \
                 f"{_p.name} top-level imports beyond worker stdlib/numpy: {sorted(_bad)}"
-    return PATCH
+    # Layout lock: exactly one wrapper zip source, prefix intact.
+    assert (wrap / "arc3sdk").is_dir()
+    assert not (PATCH / "arc3sdk").exists(), "legacy flat staging must be gone"
+    return wrap
 
 
 VERIFY_SCRIPT = r"""
@@ -138,6 +162,7 @@ def verify(patch: Path) -> None:
         env = dict(os.environ)
         env["PYTHONPATH"] = str(patch)
         env["PYTHONNOUSERSITE"] = "1"
+        env["PYTHONDONTWRITEBYTECODE"] = "1"
         proc = subprocess.run(
             [sys.executable, str(runner)], cwd=td, capture_output=True,
             text=True, timeout=180, env=env)
