@@ -444,6 +444,7 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
         except Exception:
             _time = None  # type: ignore
         # CASS-Phi audit: the current frame is the post frame of last turn.
+        # The same realized outcome retrodicts the hypothesis ledger.
         try:
             if _phi_enabled():
                 from .cass_phi import shared as _phi_shared
@@ -453,6 +454,12 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
                     obs.game_id, obs.level,
                     _state_fp(obs.grid.tobytes()), obs.grid.tobytes())
                 _phi_summary_note(obs.game_id, _art)
+                try:
+                    from .hypothesis_ledger import shared_ledger as _hl
+                    _changed = bool((_art or {}).get("delta") == "changed")
+                    _hl().observe(obs.game_id, obs.level, _changed)
+                except Exception:
+                    pass
         except Exception:
             pass
         # Skill tier: evaluate grandmaster skills on the live frame.
@@ -553,6 +560,12 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
                         decision="denied:%s:would%s@%.2f" % (
                             str(_reason)[:32], str(_wid)[:8],
                             round(float(conf), 4)))
+                    try:
+                        from .hypothesis_ledger import shared_ledger as _hl2
+                        _hl2().propose(obs.game_id, obs.level, _wid, conf,
+                                       "shadow:" + str(_reason)[:40])
+                    except Exception:
+                        pass
             except Exception:
                 pass
             return orig(session, arguments)
@@ -574,6 +587,12 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
                         legal=obs.available_actions, tau=_gate,
                         decision="vetoed:%s" % "+".join(
                             [str(r) for r in _chk.get("reasons", [])][:3]))
+                    try:
+                        from .hypothesis_ledger import shared_ledger as _hl3
+                        _hl3().propose(obs.game_id, obs.level, _aid_sub,
+                                       conf, "shadow:vetoed:" + str(_reason)[:32])
+                    except Exception:
+                        pass
                     return orig(session, arguments)
                 _phi.observe_turn(
                     obs.game_id, obs.level, _pre,
@@ -582,6 +601,12 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
                     "tier:%s" % str(_reason)[:48],
                     legal=obs.available_actions, tau=_gate,
                     decision="allow")
+                try:
+                    from .hypothesis_ledger import shared_ledger as _hl4
+                    _hl4().propose(obs.game_id, obs.level, _aid_sub, conf,
+                                   "tier:" + str(_reason)[:40])
+                except Exception:
+                    pass
         except Exception:
             pass
         try:

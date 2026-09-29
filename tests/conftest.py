@@ -60,6 +60,11 @@ def _reset_all():
     except Exception:
         pass
     try:
+        from arc3sdk import hypothesis_ledger as _hl
+        _hl.reset_shared()
+    except Exception:
+        pass
+    try:
         from arc3sdk import realtime_abstract_cortex as _ctx
         try:
             _ctx._LAST_OP.clear()

@@ -259,6 +259,40 @@ def test_consensus_import_failure_diagnosed_once(monkeypatch, capsys):
         p.stop()
 
 
+def test_hook_ledger_retrodiction_two_turns():
+    """Executed tier proposal resolves on next turn's realized outcome."""
+    from arc3sdk import hypothesis_ledger as _hl
+    _hl.reset_shared()
+    rec, p = _install({"action": 1, "confidence": 0.95, "reason": "ape"})
+    try:
+        _FakeSession(_grid()).step_env({"action": "UP"})
+        g2 = _grid()
+        g2[4, 4] = 7
+        _FakeSession(g2).step_env({"action": "UP"})
+        st = _hl.shared_ledger().stats().get("tier:ape", {})
+        assert st.get("resolved", 0) == 1 and st.get("confirmed", 0) == 1
+    finally:
+        p.stop()
+
+
+def test_hook_shadow_proposal_never_resolves():
+    """Denied tier proposal expires unscored (volume only)."""
+    from arc3sdk import hypothesis_ledger as _hl
+    _hl.reset_shared()
+    rec, p = _install({"action": 1, "confidence": 0.9,
+                       "reason": "causal_chain_argmax"})
+    try:
+        _FakeSession(_grid()).step_env({"action": "UP"})
+        g2 = _grid()
+        g2[4, 4] = 7
+        _FakeSession(g2).step_env({"action": "UP"})
+        st = _hl.shared_ledger().stats().get(
+            "shadow:causal_chain_argmax", {})
+        assert st.get("proposed", 0) >= 1 and st.get("resolved", 0) == 0
+    finally:
+        p.stop()
+
+
 def test_shadow_denied_records_would_be():
     """Shadow mode: denied tier logs count + mean-conf + would-be action.
 

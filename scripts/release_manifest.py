@@ -42,6 +42,7 @@ MODULES = (
     "category_engine.py",
     "skill_orchestrator.py",
     "object_segmentation.py",
+    "hypothesis_ledger.py",
 )
 
 

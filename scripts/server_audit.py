@@ -24,6 +24,7 @@ HOT_FILES = [
     "realtime_abstract_cortex.py",
     "fusion_supremacy.py",
     "object_segmentation.py",
+    "hypothesis_ledger.py",
     "causal_chain_reasoner.py",
     "algebraic_planning_engine.py",
     "unified_consensus_engine.py",
@@ -42,7 +43,7 @@ CHAIN = {"taaf_stepenv_hook.py", "unified_consensus_engine.py",
          "fusion_supremacy.py", "cass_phi.py", "skill_orchestrator.py",
          "exploration_registry.py", "kaggle_native_adapter.py",
          "competition_contract.py", "egcd.py", "zero_waste.py",
-         "object_segmentation.py"}
+         "object_segmentation.py", "hypothesis_ledger.py"}
 
 
 def check(name: str, ok: bool, detail: str = "") -> None:

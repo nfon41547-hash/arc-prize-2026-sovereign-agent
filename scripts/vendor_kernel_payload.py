@@ -73,9 +73,10 @@ MODULE_FILES = [
     "skill_orchestrator.py",
     "skill_derived_profile.py",
     "object_segmentation.py",
+    "hypothesis_ledger.py",
 ]
 
-PAYLOAD_VERSION = "v25-shadow-1"
+PAYLOAD_VERSION = "v26-team-1"
 HOOK_VERSION = "taaf-stepenv-1"
 
 
