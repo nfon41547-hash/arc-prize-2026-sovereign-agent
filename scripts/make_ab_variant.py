@@ -108,12 +108,12 @@ def build(write: bool = True) -> dict:
         datasets.append(BOOT_DATASET)
     meta = dict(main_meta)
     meta.update({
+        "id": "bang1850/arc-agi-3-27b-ab",
         "title": "arc-agi-3-27b-ab",
         "code_file": CODE_FILE,
         "dataset_sources": datasets,
         "model_sources": [MODEL_27B],
     })
-    meta.pop("id", None)
     meta.pop("id_no", None)
 
     info = {"cells": len(cells), "code_file": CODE_FILE, "model": MODEL_27B}

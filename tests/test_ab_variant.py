@@ -57,7 +57,9 @@ def test_variant_metadata_and_boot_staging():
     assert meta["code_file"] == gen.CODE_FILE
     assert meta["model_sources"] == [gen.MODEL_27B]
     assert gen.BOOT_DATASET in meta["dataset_sources"]
-    assert "id" not in meta, "variant metadata must not pin an id"
+    assert meta.get("id") == "bang1850/arc-agi-3-27b-ab", \
+        "variant must carry its own kernel id (never the main kernel id)"
+    assert "arc-agi-3-starter-kernel" not in meta.get("id", "")
     assert "arc-prize-2026-arc-agi-3" in meta["competition_sources"]
     assert meta["machine_shape"] == "NvidiaRtxPro6000"
     live = open(os.path.join(ROOT, "serving_27b", "serving_setup_27b.py"),
