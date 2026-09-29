@@ -52,9 +52,26 @@ kaggle datasets version -p dataset_patch -m "<msg>" --dir-mode zip
   else audited but never overrides. Denied reasons counted for autopsy.
 
 ## Standing orders (active unless lifted)
-- No-memorization: no game-ID-keyed manuals/priors/playbacks in runtime.
-  All learning within-run. (prior_world_memories.json + tool_priors.json
-  deleted 2026-09-26.)
+- Memorization lock LIFTED 2026-09-29 by user order ("ปลดล็อก"):
+  trajectory/SFT training allowed ONLY on license-clean artifacts
+  (verified SPDX/CC0/CC-BY/Apache-2.0/MIT per-artifact, recorded below)
+  AND with game-level holdout (never train and evaluate on the same
+  game IDs; public-25 gains from public-game training are contamination
+  until proven on held-out games/private rerun). Runtime priors stay
+  fail-open; honest-numbers and 1-submission/day unchanged.
+- License audit log (verified via `kaggle datasets metadata` / repo files):
+  - `jihangli1121/arc-agi-3-replays-v1`: CC BY 4.0 (clean w/ attribution;
+    GT replays of 25 public games, scraped from three.arcprize.org).
+  - `Tufalabs/duck-harness` (incl. `example-run`): NO license file,
+    pyproject license None -> NOT clean, training/fork-mining banned
+    until upstream adds terms (read-only reference OK, git-ignored).
+  - `justforgags/arc3-duck-lora-sft`: CC0-1.0 (clean; Qwen3.6-targeted
+    LoRA, incompatible with our Qwen3.8-Flash-Next runtime directly).
+  - `thtennant/taaf-kaggle-source-share-fork`: CC0-1.0 (clean; source
+    diff-mining only).
+  - `travislambert/travis-lambert-memory-compression-v1`: CC-BY-SA-4.0
+    (clean w/ attribution; share-alike binds derivatives).
+  - `yousefturk/fluidmind-arc-agi-3`: license unknown -> banned.
 - Honest numbers only: verified log/test numbers, never fabricated claims.
 - 1 competition submission/day. No git remote (local repo only).
 
