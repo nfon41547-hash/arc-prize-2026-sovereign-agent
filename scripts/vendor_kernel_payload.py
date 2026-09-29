@@ -75,9 +75,10 @@ MODULE_FILES = [
     "object_segmentation.py",
     "hypothesis_ledger.py",
     "flux_search.py",
+    "turn_memo.py",
 ]
 
-PAYLOAD_VERSION = "v27-flux-1"
+PAYLOAD_VERSION = "v28-fuse-1"
 HOOK_VERSION = "taaf-stepenv-1"
 
 

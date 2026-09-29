@@ -44,6 +44,7 @@ MODULES = (
     "object_segmentation.py",
     "hypothesis_ledger.py",
     "flux_search.py",
+    "turn_memo.py",
 )
 
 

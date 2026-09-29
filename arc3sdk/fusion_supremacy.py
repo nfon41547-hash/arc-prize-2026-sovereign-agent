@@ -220,12 +220,12 @@ def objects(grid: Any) -> list[dict[str, Any]]:
                 "bbox": (min(ys), min(xs), max(ys), max(xs)),
                 "children": [],
             })
-        # exact topological children (object_segmentation, complement
-        # flood-fill) mapped onto fusion order via (color, top-left);
-        # bbox fallback only if the mapping misses (never raises).
+        # exact topological children (shared per-turn memo: the same grid
+        # is segmented once no matter how many tiers read it) mapped onto
+        # fusion order via (color, top-left). Never raises.
         try:
-            from .object_segmentation import segment as _seg
-            _sn = _seg(g)["nodes"]
+            from .turn_memo import get_segment as _mseg
+            _sn = _mseg(g)["nodes"]
             _by_tl: dict = {}
             for _nd in _sn:
                 try:

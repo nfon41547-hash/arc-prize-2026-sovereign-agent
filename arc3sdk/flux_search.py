@@ -154,7 +154,12 @@ class FluxPlanner:
             stats["candidates"] = len(cands)
 
             from .world_model_simulator import WorldModelSimulator
+            from .turn_memo import get_segment as _mseg
             _sim = WorldModelSimulator()
+            try:
+                _cur_hashes = {n["hash"] for n in _mseg(g)["nodes"]}
+            except Exception:
+                _cur_hashes = set()
 
             # ---- virtual branches: memory first, surrogate only on miss.
             states: dict[int, dict[str, Any]] = {}
@@ -179,7 +184,15 @@ class FluxPlanner:
                     v_hat = float(rew) + (2.0 if term else 0.0)
                     sigma = _SIGMA0
                     cnt = self._store(key, v_hat, sigma)
-                    novel = 1.0  # first materialization: maximally informative
+                    # Object-novelty information: what fraction of the
+                    # predicted state's object hashes is unseen right now?
+                    # Shared memo: no extra segmentation beyond one per grid.
+                    try:
+                        _ph = {n["hash"] for n in _mseg(nxt)["nodes"]}
+                        novel = (len(_ph - _cur_hashes) / max(1, len(_ph))
+                                 if _ph else 0.5)
+                    except Exception:
+                        novel = 0.5
                     nvis = 1
                 states[a] = {"v": v_hat, "sigma": sigma, "novel": novel,
                              "vis": nvis}

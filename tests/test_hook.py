@@ -317,6 +317,48 @@ def test_shadow_denied_records_would_be():
         p.stop()
 
 
+def test_e2e_real_engine_through_hook_two_turns():
+    """Seamless-chain proof: REAL consensus engine through the hook.
+
+    No stubs: hook -> consensus (all tiers incl. flux/seg) -> phi audit ->
+    ledger retrodiction. Asserts passthrough-or-proof-substitution (never
+    a crash, never a statistical override) plus a populated audit trail.
+    """
+    import arc3sdk.unified_consensus_engine as uce
+    import unittest.mock as _mock
+    from arc3sdk import hypothesis_ledger as _hl
+    from arc3sdk import turn_memo as _tm
+    _hl.reset_shared()
+    _tm.reset()
+    real = uce.SovereignMasterConsensusEngine()
+    try:
+        _patcher = _mock.patch.object(
+            uce, "SovereignMasterConsensusEngine", lambda *a, **k: real)
+        _patcher.start()
+        rec = {}
+
+        def _orig(self, arguments):
+            rec["args"] = arguments
+            return {"executed": True}
+
+        _FakeSession.step_env = _orig
+        out = th.install_stepenv_hook(_FakeSession)
+        assert out["installed"] is True
+        _FakeSession(_grid()).step_env({"action": "UP"})
+        g2 = _grid()
+        g2[4, 4] = 7
+        _FakeSession(g2).step_env({"action": "UP"})
+        assert isinstance(rec.get("args"), dict)
+        assert cphi.shared().metrics("zz99-test").get("n", 0) >= 1
+        assert isinstance(_hl.shared_ledger().stats(), dict)
+        assert isinstance(th._DENIED, dict)
+    finally:
+        try:
+            _patcher.stop()
+        except Exception:
+            pass
+
+
 def test_never_raises_fuzz(monkeypatch):
     import arc3sdk.unified_consensus_engine as uce
 

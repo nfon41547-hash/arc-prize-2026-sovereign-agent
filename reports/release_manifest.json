@@ -42,7 +42,7 @@
       "source_module": "arc3sdk/algebraic_planning_engine.py"
     },
     {
-      "sha256": "124aa8b58887b17845afeeceea5fde7119a932f906db25014c73c97c1e4ca8d7",
+      "sha256": "47fbc6f2df1e2acc18ac094c9c59d1d358380cc4c5528e5e9fb45fe4d5c5bae4",
       "source_module": "arc3sdk/fusion_supremacy.py"
     },
     {
@@ -122,10 +122,14 @@
       "source_module": "arc3sdk/hypothesis_ledger.py"
     },
     {
-      "sha256": "f3d25b8b22d96a08a1a1638ba85d9af454b7cf7606306ca3054e7474d4aeaf13",
+      "sha256": "ebecd831683ad31438a7380adead6f96571c4017f4e8f50d7fe3ecb5d161560a",
       "source_module": "arc3sdk/flux_search.py"
+    },
+    {
+      "sha256": "ca3732a9f1601dee87f7f2ed22a01c8e819a459efbfdb89629119041fc240e6c",
+      "source_module": "arc3sdk/turn_memo.py"
     }
   ],
-  "payload_version": "v27-flux-1",
+  "payload_version": "v28-fuse-1",
   "schema": "arc3.release-manifest.v1"
 }

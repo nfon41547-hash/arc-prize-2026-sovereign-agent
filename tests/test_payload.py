@@ -16,7 +16,7 @@ def _load_generator():
 
 def test_payload_set_and_versions():
     gen = _load_generator()
-    assert gen.PAYLOAD_VERSION == "v27-flux-1"
+    assert gen.PAYLOAD_VERSION == "v28-fuse-1"
     assert gen.HOOK_VERSION == "taaf-stepenv-1"
     payloads = gen.build_payloads()
     assert "unified_consensus_engine.py" in payloads
