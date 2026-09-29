@@ -144,6 +144,7 @@ def test_deny_statistical_reason():
     "cortex_centroid_click", "cogniarc_stagnation_escape",
     "skill_raycast_open_corridor", "terminal_horizon_mcts_geodesic",
     "grandmaster_batched_plan", "sovereign_eikonal_geodesic",
+    "flux_interval_commit",
 ])
 def test_deny_each_v27_harm_reason(reason, monkeypatch):
     import arc3sdk.unified_consensus_engine as uce

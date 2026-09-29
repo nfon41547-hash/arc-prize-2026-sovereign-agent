@@ -99,6 +99,23 @@ class SovereignGrandmasterKernel:
         except Exception:
             pass
 
+        # Xi-FLUX boundary planner (interval-dominance, no tree/backprop).
+        self._flux_planner = None
+        try:
+            from .flux_search import FluxPlanner
+            self._flux_planner = FluxPlanner()
+        except Exception:
+            pass
+
+    def get_flux_planner(self):
+        if self._flux_planner is None:
+            try:
+                from .flux_search import FluxPlanner
+                self._flux_planner = FluxPlanner()
+            except Exception:
+                pass
+        return self._flux_planner
+
     def get_mcts_planner(self):
         if self._mcts_planner is None:
             try:
@@ -1095,6 +1112,38 @@ class SovereignGrandmasterKernel:
                                         self.planned_queue.append(fut_act)
                                 self.step_record(grid, best_act)
                                 return {"action": best_act, "confidence": mcts_conf, "reason": "terminal_horizon_mcts_geodesic"}
+            except Exception:
+                pass
+
+            # =========================================================================
+            # XI-FLUX BOUNDARY SEARCH (interval dominance, abstains on ambiguity)
+            # Kill-switch ARC3_FLUX=0 (ablation/operators). Commits surface
+            # with reason flux_interval_commit (strict-allowlist denied ->
+            # shadow evidence only, never an override).
+            # =========================================================================
+            try:
+                import os as _os_flux
+                if _os_flux.environ.get("ARC3_FLUX", "1") == "1":
+                    _fplanner = self.get_flux_planner()
+                    if _fplanner is not None:
+                        flux_res = _fplanner.plan(
+                            grid=grid,
+                            legal=safe_actions,
+                            game_id=game_id,
+                            level=current_level,
+                            fatal_states=self.fatal_state_actions,
+                            fatal_clicks=self.fatal_clicks,
+                        )
+                        if flux_res is not None:
+                            _fact = flux_res.get("action")
+                            try:
+                                _fconf = float(flux_res.get("confidence", 0.0))
+                            except Exception:
+                                _fconf = 0.0
+                            if _fact is not None and _fconf >= 0.80:
+                                self.step_record(grid, _fact)
+                                return {"action": _fact, "confidence": _fconf,
+                                        "reason": "flux_interval_commit"}
             except Exception:
                 pass
 

@@ -30,7 +30,7 @@ kaggle datasets version -p dataset_patch -m "<msg>" --dir-mode zip
 - `scripts/vendor_kernel_payload.py` generates the notebook vendor cell from
   `arc3sdk/*.py` (MODULE_FILES, PAYLOAD_VERSION). Notebook cell == dataset
   files, verified byte-identical. Regenerate, never hand-edit cells.
-- Current payload: v26-team-1. Hook: taaf-stepenv-1
+- Current payload: v27-flux-1 (payload namespace; unrelated to kernel v27). Hook: taaf-stepenv-1
   (`_HarnessGameSession.step_env` wrap — the TAAF solver has NO `.policy`).
 
 ## Score history (public/private leaderboard, verified numbers only)

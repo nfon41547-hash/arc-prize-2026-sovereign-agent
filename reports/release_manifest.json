@@ -54,7 +54,7 @@
       "source_module": "arc3sdk/cass_phi.py"
     },
     {
-      "sha256": "a160c11b61ee3aa0cbfbe4b6e82f2bd3030f3fc0b66d6146ee3e5bbba748b7e4",
+      "sha256": "cf9ca6e82f699b57a20864026492b1ba22db2f55d63c3a639d3257131c2b3f05",
       "source_module": "arc3sdk/unified_consensus_engine.py"
     },
     {
@@ -120,8 +120,12 @@
     {
       "sha256": "bbda12ad386c60a36a3d868b5c41354c1db9e3390c89e1d64cf61b97ea427a29",
       "source_module": "arc3sdk/hypothesis_ledger.py"
+    },
+    {
+      "sha256": "f3d25b8b22d96a08a1a1638ba85d9af454b7cf7606306ca3054e7474d4aeaf13",
+      "source_module": "arc3sdk/flux_search.py"
     }
   ],
-  "payload_version": "v26-team-1",
+  "payload_version": "v27-flux-1",
   "schema": "arc3.release-manifest.v1"
 }

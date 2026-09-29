@@ -74,9 +74,10 @@ MODULE_FILES = [
     "skill_derived_profile.py",
     "object_segmentation.py",
     "hypothesis_ledger.py",
+    "flux_search.py",
 ]
 
-PAYLOAD_VERSION = "v26-team-1"
+PAYLOAD_VERSION = "v27-flux-1"
 HOOK_VERSION = "taaf-stepenv-1"
 
 
