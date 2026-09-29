@@ -28,6 +28,9 @@ def test_variant_notebook_profile_and_boot():
     assert "serving_setup_27b" in c16 and "ab27_boot.start()" in c16
     assert "ab27_boot.stop(" in c16
     assert "vllm_server_watchdog" not in c16
+    c9 = "".join(code[3]["source"])
+    assert "ab27: Flash serving setup tolerated" in c9
+    assert "serving_setup.py" in c9  # tolerate, not delete: keeps runtime side-effects
 
 
 def test_variant_vendor_cell_matches_live_payload():

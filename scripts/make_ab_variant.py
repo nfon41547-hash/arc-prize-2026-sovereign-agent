@@ -67,6 +67,21 @@ os.environ.update(ab27_handle["env"])"""
 STOP_OLD = "vllm_watchdog.stop_background(timeout_seconds=15.0)"
 STOP_NEW = "ab27_boot.stop(ab27_handle if 'ab27_handle' in dir() else None)"
 
+SETUP_OLD = """for command in json.loads((BUNDLE_DIR / "setup_commands.json").read_text()):
+    print(f"taaf.kaggle: setup command: {command}", flush=True)
+    subprocess.run(command, shell=True, check=True, cwd=WORKING_DIR, env=env)"""
+
+SETUP_NEW = """_AB27_TOLERATE_FLASH = os.environ.get("TAAF_VLLM_MTP_TOKENS", "") == "0"
+for command in json.loads((BUNDLE_DIR / "setup_commands.json").read_text()):
+    print(f"taaf.kaggle: setup command: {command}", flush=True)
+    if _AB27_TOLERATE_FLASH and "serving_setup.py" in command:
+        _res = subprocess.run(command, shell=True, check=False,
+                              cwd=WORKING_DIR, env=env)
+        print(f"ab27: Flash serving setup tolerated rc={_res.returncode} "
+              f"(expected on AB arm: no Flash model attached)", flush=True)
+    else:
+        subprocess.run(command, shell=True, check=True, cwd=WORKING_DIR, env=env)"""
+
 
 def _replace_once(src: str, old: str, what: str) -> str:
     n = src.count(old)
@@ -95,10 +110,15 @@ def build(write: bool = True) -> dict:
     assert STOP_OLD in c16, "cell16 stop anchor missing"
     c16 = c16.replace(BOOT_OLD, BOOT_NEW).replace(STOP_OLD, STOP_NEW)
 
+    c9 = src(3)
+    assert SETUP_OLD in c9, "cell9 setup anchor missing"
+    c9 = c9.replace(SETUP_OLD, SETUP_NEW)
+
     code[0]["source"] = c3.splitlines(keepends=True)
+    code[3]["source"] = c9.splitlines(keepends=True)
     code[7]["source"] = c16.splitlines(keepends=True)
     import ast as _ast
-    for c in (code[0], code[7]):
+    for c in (code[0], code[3], code[7]):
         compile("".join(c["source"]), "<variant>", "exec",
                 flags=_ast.PyCF_ALLOW_TOP_LEVEL_AWAIT)
 
