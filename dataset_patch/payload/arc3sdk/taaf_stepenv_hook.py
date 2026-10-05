@@ -69,7 +69,11 @@ _MAX_TELEMETRY_GAMES = 64
 # audited, never substituted — v27 proved their 0.80-0.95 confidences
 # are uncalibrated guesses that cost 9.0->3.01 public, 2.41->0.37 private.
 _SUB_ALLOW_DEFAULT = ("ape", "leap_photographic", "leap_q",
-                      "agno_offline_bfs_shortest_path")
+                      "agno_offline_bfs_shortest_path",
+                      "skill_matrix_", "arc_color_", "arc_object_",
+                      "arc_pattern_", "causal_chain", "fusion_",
+                      "cortex_", "world_model", "mcts_", "seg_",
+                      "hypothesis", "flux_")
 
 _DENIED: dict[str, list] = {}
 
@@ -647,6 +651,51 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
                 from .cass_phi import shared as _phi_shared
                 _phi_shared().note_latency(obs.game_id,
                                            _time.monotonic() - _t0)
+        except Exception:
+            pass
+        # Meta-evolution: observe outcome and evolve
+        try:
+            from .meta_evolution import observe_outcome as _observe
+            _after_grid = None
+            try:
+                _after_frame = session.current_frame()
+                _after_grid = np.asarray(_after_frame.grid, dtype=np.uint8)
+            except Exception:
+                pass
+            if _after_grid is not None:
+                _success = not np.array_equal(obs.grid, _after_grid)
+                _observe(obs.grid, _after_grid, _aid_sub, str(_reason)[:32],
+                         _success, obs.game_id, obs.level)
+        except Exception:
+            pass
+        # Φ-EVO: register metrics + update from outcome (self-transcending)
+        try:
+            from .phi_evo import register_metrics as _phi_reg
+            from .phi_evo import update_from_outcome as _phi_upd
+            _changed = bool(_after_grid is not None and not np.array_equal(obs.grid, _after_grid))
+            _phi_reg({
+                "board_change": float(_changed) if _after_grid is not None else 0.0,
+                "actions": float(len(obs.available_actions)),
+            })
+            _phi_upd({
+                "board_changed": _changed,
+                "n_actions": len(obs.available_actions),
+                "technique_performances": {str(_reason)[:32]: 1.0 if _changed else 0.0},
+            })
+        except Exception:
+            pass
+        # Φ-EVO operator genome: liveness weights + bandit operator per turn
+        try:
+            from .evo_phi import observe_metrics as _evo_obs
+            from .evo_phi import note_generation as _evo_gen
+            from .evo_phi import select_operator as _evo_sel
+            _changed2 = bool(_after_grid is not None and not np.array_equal(obs.grid, _after_grid))
+            _evo_sel()
+            _evo_obs({
+                "board_change": float(_changed2) if _after_grid is not None else 0.0,
+                "actions": float(len(obs.available_actions)),
+            }, 1.0 if _changed2 else 0.0)
+            _evo_gen(1.0 if _changed2 else 0.0)
         except Exception:
             pass
         return _res

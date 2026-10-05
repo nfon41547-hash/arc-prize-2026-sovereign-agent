@@ -17,6 +17,14 @@ Analyzer discovery contract (same as main stack):
 Tuning via env (AB27_*), all with documented defaults. Never raises
 out of stop(); start() raises LOUDLY with the cause (boot failure must
 be diagnosable from the worker log, never silent).
+
+Runtime layer (AB arm root cause, proven from the worker log): the shared
+Flash serving_setup command dies at resolve_model_dir() (no Flash model
+attached) BEFORE verify_and_extract_runtime(), so the pinned vLLM runtime
+is never extracted and stock vLLM stays unimportable. ensure_runtime()
+finishes that job with the bundle's OWN pinned verifiers (its main() is
+guarded, so importing is side-effect-free), strips the Flash-model env
+gates, and wires the extracted environment for the serve subprocess.
 """
 
 from __future__ import annotations
@@ -38,6 +46,15 @@ MODEL_SLUG_HINTS = (
 )
 
 _HANDLE: dict = {}
+
+# Flash-model env gates set by the bundle's runtime_environment(); never
+# valid on the 27B stock arm (no PLE layer, different model identity).
+FLASH_PLE_ENV_KEYS = (
+    "VLLM_PLE_CPU_OFFLOAD",
+    "VLLM_PLE_OFFLOAD_READY_TIMEOUT",
+    "VLLM_RADIXARK_QWEN38_NVFP4_PLE_FP8",
+    "VLLM_RADIXARK_QWEN38_NVFP4_CONFIG_SHA256",
+)
 
 
 def _env(name: str, default: str) -> str:
@@ -127,6 +144,85 @@ def _poll_ready(deadline_s: float) -> dict:
             "wait_s": round(time.monotonic() - start, 1)}
 
 
+def _find_flash_bundle() -> Path:
+    """Locate the shared keithtyser serving_setup.py (runtime dependency).
+
+    The notebook already runs this file as a setup command; the AB arm
+    additionally imports it to reuse the pinned runtime verifiers.
+    """
+    bundle = _env("TAAF_KAGGLE_BUNDLE_DIR", "")
+    if bundle:
+        candidate = Path(bundle) / "serving_setup.py"
+        if candidate.is_file():
+            return candidate
+    root = Path("/kaggle/input")
+    if root.exists():
+        for path in root.rglob("serving_setup.py"):
+            if path.is_file():
+                return path
+    raise FileNotFoundError(
+        "shared serving_setup.py bundle not found under /kaggle/input")
+
+
+def _load_flash_module(path: Path):
+    """Import the bundle's serving_setup module. Safe: its main() is guarded
+    under `if __name__ == "__main__"`, so importing has no side effects; only
+    its pinned verifiers are called."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "_ab27_flash_serving_setup", str(path))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def ensure_runtime() -> dict:
+    """Extract + verify the pinned vLLM runtime on the AB arm.
+
+    Root cause (proven from the AB arm worker log): the shared Flash
+    serving_setup command dies at resolve_model_dir() (no Flash model
+    attached) BEFORE verify_and_extract_runtime(), so the runtime layer is
+    never extracted and stock vLLM stays unimportable. This finishes the job
+    using the bundle's OWN pinned verifiers (no reimplementation drift), then
+    wires the extracted environment for the serve subprocess.
+    """
+    try:
+        import vllm  # noqa: F401
+        return {"source": "base-image",
+                "version": getattr(vllm, "__version__", "?")}
+    except Exception as first:
+        print("ab27: vllm import failed (%r); extracting pinned runtime "
+              "layer via the shared bundle" % first, flush=True)
+    mod = _load_flash_module(_find_flash_bundle())
+    runtime_dir = mod.resolve_runtime_dir()  # runtime mount only, no model
+    print("ab27: runtime_dir=%s" % runtime_dir, flush=True)
+    check = mod.verify_and_extract_runtime(
+        runtime_dir, full_layer_hashes=True, scan_extracted_caches=True)
+    print("ab27: runtime extracted layers=%d manifest=%s"
+          % (len(check.get("layers", [])),
+             str(check.get("manifest_sha256", ""))[:16]), flush=True)
+    env, _env_check = mod.runtime_environment(
+        deep_preload_validation=False,
+        tuning={"omp_num_threads": int(_env("AB27_OMP_THREADS", "1"))},
+    )
+    for key in FLASH_PLE_ENV_KEYS:
+        env.pop(key, None)  # Flash-model gates: never on the 27B stock arm
+    os.environ.update(env)
+    # The serve subprocess inherits os.environ; as a fresh process its loader
+    # honors PYTHONPATH/LD_LIBRARY_PATH. This process's loader already cached
+    # them at startup, so the in-process import stays best-effort (log only) —
+    # the readiness poll below is the real gate.
+    try:
+        import vllm  # noqa: F401
+        print("ab27: vllm %s (in-process)" % getattr(vllm, "__version__", "?"),
+              flush=True)
+    except Exception as exc:
+        print("ab27: in-process vllm import still unavailable (%r); the "
+              "serve subprocess carries the pinned env" % exc, flush=True)
+    return {"source": "pinned-runtime", "runtime_dir": str(runtime_dir),
+            "layers": len(check.get("layers", []))}
+
+
 def start() -> dict:
     """Boot the server; returns handle. Raises loudly on failure."""
     global _HANDLE
@@ -134,12 +230,8 @@ def start() -> dict:
         return dict(_HANDLE)
     model_dir = find_model_dir()
     print("ab27: model_dir=%s" % model_dir, flush=True)
-    try:
-        import vllm  # noqa: F401
-        print("ab27: vllm %s" % getattr(vllm, "__version__", "?"), flush=True)
-    except Exception as exc:
-        raise RuntimeError("ab27: stock vLLM not importable: %r. "
-                           "Attach a runtime providing vLLM." % exc)
+    runtime = ensure_runtime()
+    print("ab27: runtime=%s" % json.dumps(runtime), flush=True)
     cmd = build_command(model_dir)
     print("ab27: exec: %s" % " ".join(cmd[:6] + ["..."]), flush=True)
     log_path = Path(_env("AB27_LOG", "/tmp/ab27-vllm.log"))

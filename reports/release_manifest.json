@@ -46,7 +46,7 @@
       "source_module": "arc3sdk/fusion_supremacy.py"
     },
     {
-      "sha256": "b018872b193d593d828ff58a602706d88bc5ec9da3de2d5d6d3594dbb7eca9cc",
+      "sha256": "0889ef8ea8b62855f85cc59f36ecdd658ba4c383d11a308e070056bd6c7eaa8b",
       "source_module": "arc3sdk/taaf_stepenv_hook.py"
     },
     {
@@ -54,7 +54,7 @@
       "source_module": "arc3sdk/cass_phi.py"
     },
     {
-      "sha256": "cf9ca6e82f699b57a20864026492b1ba22db2f55d63c3a639d3257131c2b3f05",
+      "sha256": "4062421990dd6bf352522c72e12353ded8478f076ec95adf6c52d17949b85546",
       "source_module": "arc3sdk/unified_consensus_engine.py"
     },
     {
@@ -110,7 +110,7 @@
       "source_module": "arc3sdk/category_engine.py"
     },
     {
-      "sha256": "d8df36b698f76dfb4171679a38c1de9c45c3bfd92a2988b125b3c7f9258c6ed9",
+      "sha256": "3501d9bb18bef7caaa5d070f060523849619512c502238f8201a2aca34e174fe",
       "source_module": "arc3sdk/skill_orchestrator.py"
     },
     {

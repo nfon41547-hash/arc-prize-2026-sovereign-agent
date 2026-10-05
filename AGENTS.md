@@ -25,6 +25,11 @@ kaggle datasets version -p dataset_patch -m "<msg>" --dir-mode zip
   pushing (a rename inside staging uploads the stray file), restore
   after. `scripts/build_dataset_patch.py` is the single source of truth
   for staging (byte-identical to the notebook vendor cell).
+- SEQUENTIAL RULE (verified 2026-09-30): never run `vendor_kernel_payload.py`
+  and `make_ab_variant.py` in parallel — the variant reads the main
+  notebook and races the vendor-cell write (stale hash `00744c1e` shipped
+  twice). Always: vendor first, WAIT for output, then variant, then
+  `release_manifest.py --write`.
 
 ## Single source of truth
 - `scripts/vendor_kernel_payload.py` generates the notebook vendor cell from

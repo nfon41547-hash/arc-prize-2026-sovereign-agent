@@ -1,0 +1,130 @@
+[
+  {
+    "config": "baseline",
+    "proposals": 0,
+    "avg_conf": 0,
+    "max_conf": 0,
+    "latency_ms": 0.007099999493220821,
+    "grid": "8x8"
+  },
+  {
+    "config": "all_on",
+    "proposals": 7,
+    "avg_conf": 0.8485714285714285,
+    "max_conf": 0.94,
+    "latency_ms": 595.9374999983993,
+    "grid": "8x8"
+  },
+  {
+    "config": "top5",
+    "proposals": 7,
+    "avg_conf": 0.6161904761904762,
+    "max_conf": 0.6466666666666666,
+    "latency_ms": 1.1152000006404705,
+    "grid": "8x8"
+  },
+  {
+    "config": "top10",
+    "proposals": 7,
+    "avg_conf": 0.6742857142857143,
+    "max_conf": 0.72,
+    "latency_ms": 0.9225999983755173,
+    "grid": "8x8"
+  },
+  {
+    "config": "baseline",
+    "proposals": 0,
+    "avg_conf": 0,
+    "max_conf": 0,
+    "latency_ms": 0.001999998858082108,
+    "grid": "16x16"
+  },
+  {
+    "config": "all_on",
+    "proposals": 12,
+    "avg_conf": 0.7463333333333333,
+    "max_conf": 0.95,
+    "latency_ms": 4.417600001033861,
+    "grid": "16x16"
+  },
+  {
+    "config": "top5",
+    "proposals": 11,
+    "avg_conf": 0.7230909090909091,
+    "max_conf": 0.7933333333333333,
+    "latency_ms": 1.9611999996413942,
+    "grid": "16x16"
+  },
+  {
+    "config": "top10",
+    "proposals": 11,
+    "avg_conf": 0.757987012987013,
+    "max_conf": 0.8214285714285714,
+    "latency_ms": 1.8466999990778277,
+    "grid": "16x16"
+  },
+  {
+    "config": "baseline",
+    "proposals": 0,
+    "avg_conf": 0,
+    "max_conf": 0,
+    "latency_ms": 0.0021999985619913787,
+    "grid": "32x32"
+  },
+  {
+    "config": "all_on",
+    "proposals": 12,
+    "avg_conf": 0.8445236985236986,
+    "max_conf": 0.91,
+    "latency_ms": 12.050299999827985,
+    "grid": "32x32"
+  },
+  {
+    "config": "top5",
+    "proposals": 12,
+    "avg_conf": 0.8490204965026945,
+    "max_conf": 0.9026315789473681,
+    "latency_ms": 5.243300000074669,
+    "grid": "32x32"
+  },
+  {
+    "config": "top10",
+    "proposals": 12,
+    "avg_conf": 0.867500494071146,
+    "max_conf": 0.9139999999999996,
+    "latency_ms": 4.687900000135414,
+    "grid": "32x32"
+  },
+  {
+    "config": "baseline",
+    "proposals": 0,
+    "avg_conf": 0,
+    "max_conf": 0,
+    "latency_ms": 0.0022999993234407157,
+    "grid": "64x64"
+  },
+  {
+    "config": "all_on",
+    "proposals": 12,
+    "avg_conf": 0.9210778965448876,
+    "max_conf": 0.9256756756756753,
+    "latency_ms": 41.43909999947937,
+    "grid": "64x64"
+  },
+  {
+    "config": "top5",
+    "proposals": 12,
+    "avg_conf": 0.9340109337872512,
+    "max_conf": 0.9354838709677429,
+    "latency_ms": 15.658199999961653,
+    "grid": "64x64"
+  },
+  {
+    "config": "top10",
+    "proposals": 12,
+    "avg_conf": 0.9389371797676608,
+    "max_conf": 0.9396551724137946,
+    "latency_ms": 15.219400000205496,
+    "grid": "64x64"
+  }
+]

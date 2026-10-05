@@ -76,6 +76,31 @@ MODULE_FILES = [
     "hypothesis_ledger.py",
     "flux_search.py",
     "turn_memo.py",
+    # v2-skill-orchestrator-2: full SOTA technique fusion.
+    "algebraic_planning_engine.py",
+    "causal_chain_reasoner.py",
+    "fusion_supremacy.py",
+    "spectral_topological_reasoning.py",
+    "realtime_abstract_cortex.py",
+    "world_model_simulator.py",
+    "mcts_planner.py",
+    # Original Algorithm: Transition Learner (learns from transitions directly).
+    "transition_learner.py",
+    # Meta-Evolution: Self-improving system coordinated with LLM feedback.
+    "meta_evolution.py",
+    # Φ-EVO: Phenomenological Self-Transcending Evolution Engine.
+    "phi_evo.py",
+    # Φ-EVO (evo_phi): MetricLiveness + HiddenDimensionMiner + OperatorGenome.
+    "evo_phi.py",
+    # v23-skills-1: ARC-specific skills wired into the decision chain.
+    "abstraction_skill_registry.py",
+    "arc_color_transform.py",
+    "arc_object_tracker.py",
+    "arc_pattern_completion.py",
+    # V6 hierarchical controller & cognitive utility
+    "cognitive_utility.py",
+    "sobu_v6.py",
+    "priority_scheduler_dprime.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"
