@@ -613,6 +613,23 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
                     pass
         except Exception:
             pass
+
+        # SOBU-Omega + Cognitive Utility V6 Dynamic Arbitration
+        try:
+            from .sobu_v6 import shared_controller as _v6_sc
+            _sc = _v6_sc()
+            if _sc.enabled:
+                _a0, _x0, _y0 = _parse_requested(arguments)
+                _cmp = _sc.compare(
+                    obs.game_id, obs.level, obs.grid,
+                    (_a0, _x0, _y0), (_aid_sub, _ax_sub, _ay_sub),
+                    str(_reason), conf,
+                )
+                if _sc.mode == "control" and not _cmp.get("allow_tier", True):
+                    return orig(session, arguments)
+        except Exception:
+            pass
+
         try:
             if _note_substitution(obs.game_id):
                 _rhae = ""
@@ -698,6 +715,21 @@ def decide_and_execute(session: Any, arguments: Any, orig: Any) -> Any:
             _evo_gen(1.0 if _changed2 else 0.0)
         except Exception:
             pass
+        # SOBU-Omega: update persistent M_t from transition outcome
+        try:
+            from .duck_sobu_omega import get_sobu_omega as _get_sobu_omega
+            _res_dict = _res if isinstance(_res, dict) else {}
+            _s_delta = float(_res_dict.get("reward", 0.0) or 0.0)
+            _lvl_comp = bool(_res_dict.get("level_completed", False))
+            _g_over = bool(_res_dict.get("game_over", False))
+            if _after_grid is not None:
+                _get_sobu_omega().observe_transition(
+                    obs.game_id, obs.level, obs.grid, _after_grid,
+                    _aid_sub if '_aid_sub' in locals() else 0,
+                    _s_delta, _lvl_comp, _g_over,
+                )
+        except Exception:
+            pass
         return _res
     except Exception:
         try:
@@ -731,6 +763,12 @@ def install_stepenv_hook(session_cls: Any) -> dict[str, Any]:
         session_cls.step_env = _wrapped
         try:
             session_cls._sovereign_wrapped = HOOK_VERSION
+        except Exception:
+            pass
+        # Also arm ToolAgent prompt injection hook
+        try:
+            from .duck_sobu_omega import install_tool_agent_sobu_hook as _install_ta_hook
+            _install_ta_hook()
         except Exception:
             pass
         return {"installed": True, "reason": "wrapped", "hook": HOOK_VERSION}

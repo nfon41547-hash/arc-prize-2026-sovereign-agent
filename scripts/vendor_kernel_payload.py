@@ -101,6 +101,7 @@ MODULE_FILES = [
     "cognitive_utility.py",
     "sobu_v6.py",
     "priority_scheduler_dprime.py",
+    "duck_sobu_omega.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"

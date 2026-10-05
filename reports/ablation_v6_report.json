@@ -1,0 +1,38 @@
+{
+  "A0_v5": {
+    "arm": "A0_v5",
+    "desc": "Baseline V5 behavior",
+    "score": 85.0,
+    "levels_completed": 50,
+    "actions_per_level": 15.0,
+    "dead_work": 0,
+    "avg_latency_ms": 49.01
+  },
+  "A1_scheduler": {
+    "arm": "A1_scheduler",
+    "desc": "D' priority scheduler alone",
+    "score": 85.0,
+    "levels_completed": 50,
+    "actions_per_level": 15.0,
+    "dead_work": 0,
+    "avg_latency_ms": 49.03
+  },
+  "A2_sobu_shadow": {
+    "arm": "A2_sobu_shadow",
+    "desc": "Scheduler + SOBU shadow audit (no action override)",
+    "score": 85.0,
+    "levels_completed": 50,
+    "actions_per_level": 15.0,
+    "dead_work": 0,
+    "avg_latency_ms": 47.41
+  },
+  "A3_v6_full": {
+    "arm": "A3_v6_full",
+    "desc": "Scheduler + SOBU cognitive utility arbitration",
+    "score": 85.0,
+    "levels_completed": 50,
+    "actions_per_level": 15.0,
+    "dead_work": 0,
+    "avg_latency_ms": 47.74
+  }
+}

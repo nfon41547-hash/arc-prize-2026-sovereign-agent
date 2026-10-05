@@ -819,6 +819,28 @@ class SovereignGrandmasterKernel:
             if not safe_actions:
                 safe_actions = available_actions
 
+            # Cognitive Action Utility Re-ranking U_i(E)
+            try:
+                from .cognitive_utility import get_cognitive_utility_engine
+                _cu_engine = get_cognitive_utility_engine()
+                _prev_g = self.grid_history[-1] if self.grid_history else None
+                _scored_actions = []
+                for _sa in safe_actions:
+                    _u_val = _cu_engine.compute_utility(
+                        action=_sa,
+                        grid=grid,
+                        prev_grid=_prev_g,
+                        fatal_state_actions=self.fatal_state_actions,
+                        fatal_clicks=self.fatal_clicks,
+                        state_visit_counts=self.state_visit_counts,
+                        state_sig=sig,
+                    )
+                    _scored_actions.append((_u_val, _sa))
+                _scored_actions.sort(key=lambda x: x[0], reverse=True)
+                safe_actions = [x[1] for x in _scored_actions if x[0] > -500.0] or safe_actions
+            except Exception:
+                pass
+
             is_stuck = self.detect_deadlock_and_stagnation(grid)
 
             # Disambiguation click when 6 is legal (intrinsic: no game-ID
