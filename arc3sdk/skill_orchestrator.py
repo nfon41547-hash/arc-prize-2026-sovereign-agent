@@ -126,7 +126,7 @@ def evaluate_skills(
 
     try:
         g = np.asarray(grid, dtype=np.uint8)
-        if g.ndim != 2 or g.size == 0:
+        if g.ndim != 2 or g.size <= 1:
             return []
 
         if not _is_novel(game_id, level, g):
@@ -407,6 +407,16 @@ def evaluate_skills(
                     adj_conf = max(0.0, min(1.0, conf + b_val * 0.15))
                     biased_proposals.append((act, x, y, src, adj_conf))
                 proposals = biased_proposals
+        except Exception:
+            pass
+
+        # 25) mpc_grounded_debate (Theory of Mind Belief Tracking & Quorum Consensus)
+        try:
+            from .mpc_grounded_debate import MPCGroundedDebateEngine
+            mpc = MPCGroundedDebateEngine(max_debate_rounds=2, quorum_threshold=0.6)
+            d_act, d_conf, _ = mpc.deliberate(g, available)
+            if d_act is not None and d_conf >= _SKILL_GATE:
+                proposals.append((int(d_act), None, None, "mpc_debate", d_conf))
         except Exception:
             pass
 

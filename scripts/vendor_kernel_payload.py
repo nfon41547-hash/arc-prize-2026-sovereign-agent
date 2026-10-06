@@ -113,6 +113,7 @@ MODULE_FILES = [
     "agent_symbolic_learner.py",
     "agent_q_mcts.py",
     "agent_kb_memory.py",
+    "mpc_grounded_debate.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"

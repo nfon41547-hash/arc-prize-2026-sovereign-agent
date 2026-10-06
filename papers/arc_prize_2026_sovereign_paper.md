@@ -110,6 +110,17 @@ To enable universal cross-domain experience sharing and eliminate redundant tria
 4. **Adaptive Utility Eviction**:
    $$u_j \leftarrow u_j + \eta (r_j - u_j)$$
 
+### 2.9 Grounded Multi-Party Deliberation & Theory-of-Mind (ToM) Belief Books
+To address the degradation and circular rambling of ungrounded multi-agent debate (Sapkota et al., 2025), the sovereign cortex enforces strict epistemic grounding:
+1. **Formal Communicative Act Vocabulary**:
+   $$\mathcal{A}_{\text{comm}} \in \{\text{PROPOSE}, \text{CRITIQUE}, \text{REVISE}, \text{VOTE}\}$$
+   forbidding unconstrained natural-language wander and ensuring discrete state-action bindings.
+2. **Epistemic Belief Books & Dynamic Turn-Taking**:
+   Each specialized persona tracks an explicit belief distribution $B_i(s)$ and epistemic entropy $\mathcal{H}(B_i)$, allocating speaking turns to agents with maximum disagreement.
+3. **Quorum Consensus Early-Stop**:
+   $$\sum_{i} w_i \cdot \mathbb{1}[a_i = a^*] \ge \theta_{\text{quorum}} \cdot \sum_i w_i$$
+   terminating debate immediately upon formal invariant verification.
+
 ---
 
 ## 3. High-Throughput Inference Engine (Blackwell SGLang Stack)
@@ -137,7 +148,7 @@ $$\text{Throughput}_{\text{SGLang}} \ge 500\text{ tokens/sec}, \quad \text{TTFT}
 ---
 
 ## 5. Conclusion
-The **Sovereign Autonomous Hyper-Cortex** resolves the fundamental tension between computational throughput, memory sycophancy, unguided zero-shot reasoning, unanswerable hallucination, multi-step search failure, and isolated experience silos in ARC-AGI-3. By marrying **MemAdapter**, **Agent-Instruct Steering**, **AGent Unanswerability Filtering**, **Agent Symbolic Learning (ASL)**, **Agent Q Guided MCTS**, **AGENT KB Cross-Domain Memory**, **OaTTT Hindsight Pruning**, and **Blackwell SGLang**, we establish a mathematically grounded, highly scalable architecture for frontier artificial general intelligence.
+The **Sovereign Autonomous Hyper-Cortex** resolves the fundamental tension between computational throughput, memory sycophancy, unguided zero-shot reasoning, unanswerable hallucination, multi-step search failure, and isolated experience silos in ARC-AGI-3. By marrying **MemAdapter**, **Agent-Instruct Steering**, **AGent Unanswerability Filtering**, **Agent Symbolic Learning (ASL)**, **Agent Q Guided MCTS**, **AGENT KB Cross-Domain Memory**, **Grounded MPC Deliberation**, **OaTTT Hindsight Pruning**, and **Blackwell SGLang**, we establish a mathematically grounded, highly scalable architecture for frontier artificial general intelligence.
 
 ---
 
@@ -147,7 +158,8 @@ The **Sovereign Autonomous Hyper-Cortex** resolves the fundamental tension betwe
 3. Zhou, W., Ou, Y., Ding, S., Li, L., Wu, J., Wang, T., Chen, J., Wang, S., Xu, X., Zhang, N., Chen, H., & Jiang, Y. E. (2024). *Symbolic Learning Enables Self-Evolving Agents*. arXiv preprint arXiv:2406.18532 (AIWaves Inc.).
 4. Mills, E., Garg, N., Motwani, S., Finn, C., Garg, D., & Rafailov, R. (2024). *Agent Q: Advanced Reasoning and Learning for Autonomous AI Agents*. arXiv preprint arXiv:2408.07199 (Stanford University / MultiOn).
 5. Tang, X., Qin, T., Peng, T., Zhou, Z., Shao, D., Du, T., Wei, X., Xia, P., Wu, F., Zhu, H., Zhang, G., Liu, J., Wang, X., Hong, S., Wu, C., Cheng, H., Wang, C., & Zhou, W. (2025). *AGENT KB: Leveraging Cross-Domain Experience for Agentic Problem Solving*. Yale University, OPPO, Stanford, Google DeepMind, Microsoft Research.
-6. Chollet, F. (2019). *On the Measure of Intelligence*. arXiv preprint arXiv:1911.01547.
-7. Zheng, L., et al. (2024). *SGLang: Efficient Execution of Structured Language Model Programs*.
-8. Team bkk (2026). *Sovereign Agent Artifacts & Replay Trace Data*. GitHub repository: `https://github.com/nfon41547-hash/arc-prize-2026-sovereign-agent`.
+6. Sapkota, et al. (2025). *Multi-Party Conversational AI and Multi-Agent Deliberation*.
+7. Chollet, F. (2019). *On the Measure of Intelligence*. arXiv preprint arXiv:1911.01547.
+8. Zheng, L., et al. (2024). *SGLang: Efficient Execution of Structured Language Model Programs*.
+9. Team bkk (2026). *Sovereign Agent Artifacts & Replay Trace Data*. GitHub repository: `https://github.com/nfon41547-hash/arc-prize-2026-sovereign-agent`.
 
