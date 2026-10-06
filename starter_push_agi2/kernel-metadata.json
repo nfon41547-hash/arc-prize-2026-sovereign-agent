@@ -5,12 +5,17 @@
   "language": "python",
   "kernel_type": "notebook",
   "is_private": true,
-  "enable_gpu": false,
+  "enable_gpu": true,
   "enable_tpu": false,
   "enable_internet": false,
   "competition_sources": [
     "arc-prize-2026-arc-agi-2"
   ],
-  "dataset_sources": [],
+  "model_sources": [
+    "sorokin/qwen3_4b_grids15_sft139/transformers/bfloat16/1"
+  ],
+  "dataset_sources": [
+    "ser8147/arc2-unsloth-wheelhouse"
+  ],
   "kernel_sources": []
 }
