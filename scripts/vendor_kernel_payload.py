@@ -102,6 +102,9 @@ MODULE_FILES = [
     "sobu_v6.py",
     "priority_scheduler_dprime.py",
     "duck_sobu_omega.py",
+    # Fable layer (handbook harness core & patch)
+    "fable_layer_core.py",
+    "fable_layer_patch.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"

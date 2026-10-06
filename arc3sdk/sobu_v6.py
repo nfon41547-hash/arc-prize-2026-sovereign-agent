@@ -153,6 +153,20 @@ class Controller:
                      'changed':changed,'noop':noop,'fatal':bool(fatal),'score_delta':float(score_delta or 0.0),
                      'level_delta':int(level_delta or 0),'reward':reward,'latency_s':float(latency_s or 0.0)}
             self._audit(payload); return payload
+    def evaluate_stream_priority(self, game_id: str, tokens_spent: int, levels_completed: int, total_levels: int = 10) -> float:
+        """Dynamic Token Re-allocation priority across multi-game streams (D' metric).
+        
+        P = A * M * C + B * phi
+        Plateaued games with information_gain -> 0 are de-prioritized to reallocate compute.
+        """
+        with self.lock:
+            g = self.games.get(str(game_id))
+            ev = g.events if g else 0
+            alpha = max(1, levels_completed) / float(max(1, total_levels))
+            marginal_cost = 1.0 / (1.0 + math.log1p(tokens_spent / 1000.0))
+            stagnation = 0.5 if (ev > 50 and levels_completed == 0) else 1.0
+            p = alpha * marginal_cost * stagnation
+            return float(p)
     def _audit(self,payload):
         if not _b(os.environ.get('ARC3_V6_AUDIT','1'),True): return
         try:

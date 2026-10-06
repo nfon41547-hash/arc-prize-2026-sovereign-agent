@@ -1,0 +1,6 @@
+{
+  "iterations": 2000,
+  "total_time_ms": 180.6280999999217,
+  "per_turn_overhead_us": 90.31404999996084,
+  "throughput_fps": 11072.474327089014
+}

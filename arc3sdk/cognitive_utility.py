@@ -106,6 +106,27 @@ class CognitiveUtilityEngine:
         )
         return float(utility)
 
+    def guard_cost_tradeoff(
+        self,
+        is_noop: bool,
+        is_fatal: bool,
+        retry_latency_s: float = 1.8,
+        action_penalty_s: float = 0.5,
+    ) -> tuple[bool, float]:
+        """Calculates J_guard(a) = I[a in H_noop(s)] * (Delta_Latency_retry - Penalty_wasted_action).
+        
+        Returns (should_veto, cost_score).
+        - Fatal state: unconditional hard veto (True, -999.0)
+        - No-op: arbitrates whether to trigger LLM retry vs accepting next-frame feedback.
+        """
+        if is_fatal:
+            return True, -999.0
+        if not is_noop:
+            return False, 0.0
+        j_guard = retry_latency_s - action_penalty_s
+        should_veto = (j_guard < 0.0)
+        return should_veto, float(j_guard)
+
 _GLOBAL_UTILITY = CognitiveUtilityEngine()
 
 def get_cognitive_utility_engine() -> CognitiveUtilityEngine:
