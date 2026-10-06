@@ -107,6 +107,8 @@ MODULE_FILES = [
     "fable_layer_patch.py",
     "hindsight_pruner.py",
     "adsd_engine.py",
+    "memadapter_engine.py",
+    "agent_instruct_reasoner.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"
