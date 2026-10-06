@@ -343,6 +343,73 @@ def evaluate_skills(
         except Exception:
             pass
 
+        # 20) agent_instruct_reasoner (Zero-shot autonomous reasoning supervisor)
+        try:
+            from .agent_instruct_reasoner import AgentInstructReasoner
+            air = AgentInstructReasoner()
+            inst_result = air.instruct_reasoning(g, available)
+            if inst_result and inst_result.get("confidence", 0) >= _SKILL_GATE:
+                act = inst_result.get("action")
+                if act is not None:
+                    proposals.append((int(act), None, None, "agent_instruct", inst_result["confidence"]))
+        except Exception:
+            pass
+
+        # 21) agent_q_mcts (Guided MCTS with Self-Critique Process Supervision)
+        try:
+            from .agent_q_mcts import AgentQEngine
+            aq = AgentQEngine(num_simulations=16)
+            def _quick_step(grid_in, action_in):
+                return grid_in, 0.5, False, False
+            q_act, q_conf, q_traj, q_pairs = aq.search_and_plan(g, available, _quick_step)
+            if q_act is not None and q_conf >= _SKILL_GATE:
+                proposals.append((int(q_act), None, None, "agent_q_mcts", q_conf))
+        except Exception:
+            pass
+
+        # 22) agent_kb_memory (Reason-Retrieve-Refine with Disagreement Gate)
+        try:
+            from .agent_kb_memory import AgentKBMemory
+            akb = AgentKBMemory()
+            query_task = f"Solve grid shape {g.shape} unique colors {len(np.unique(g))}"
+            retrieved = akb.hybrid_retrieve(query_task, top_k=1)
+            if retrieved and retrieved[0][1] >= _SKILL_GATE:
+                exp = retrieved[0][0]
+                if exp.action_reasoning_pairs:
+                    act_cand = exp.action_reasoning_pairs[0][0]
+                    if act_cand in available:
+                        proposals.append((int(act_cand), None, None, "agent_kb", retrieved[0][1]))
+        except Exception:
+            pass
+
+        # 23) agent_unanswerable_detector (Filter out spurious unanswerable actions)
+        try:
+            from .agent_unanswerable_detector import AgentUnanswerableDetector
+            aud = AgentUnanswerableDetector()
+            filtered_proposals = []
+            for act, x, y, src, conf in proposals:
+                val = aud.calculate_unanswerable_value(num_answerable=int(conf * 10), num_unanswerable=2)
+                if val >= 0:
+                    filtered_proposals.append((act, x, y, src, conf))
+            proposals = filtered_proposals
+        except Exception:
+            pass
+
+        # 24) zero_waste annihilation (Prune zero-information redundant loops)
+        try:
+            from .zero_waste import ledger
+            led = ledger()
+            bias_map = led.bias(available)
+            if bias_map:
+                biased_proposals = []
+                for act, x, y, src, conf in proposals:
+                    b_val = bias_map.get(str(act).upper(), 0.0)
+                    adj_conf = max(0.0, min(1.0, conf + b_val * 0.15))
+                    biased_proposals.append((act, x, y, src, adj_conf))
+                proposals = biased_proposals
+        except Exception:
+            pass
+
         # Sort by confidence descending, deduplicate, calibrate
         proposals.sort(key=lambda p: -p[4])
         seen: set[tuple[int, int | None, int | None]] = set()
