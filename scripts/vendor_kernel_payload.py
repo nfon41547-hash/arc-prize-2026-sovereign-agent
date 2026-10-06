@@ -112,6 +112,7 @@ MODULE_FILES = [
     "agent_unanswerable_detector.py",
     "agent_symbolic_learner.py",
     "agent_q_mcts.py",
+    "agent_kb_memory.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"

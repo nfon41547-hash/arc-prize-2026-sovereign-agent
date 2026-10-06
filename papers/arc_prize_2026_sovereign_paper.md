@@ -96,6 +96,20 @@ Drawing inspiration from Agent Q (Mills et al., Stanford / MultiOn, 2024), the s
 3. **Direct Preference Optimization (DPO) Loss**:
    $$\mathcal{L}_{\text{DPO}}(\theta; \theta_{\text{ref}}) = -\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w|x)}{\pi_{\text{ref}}(y_w|x)} - \beta \log \frac{\pi_\theta(y_l|x)}{\pi_{\text{ref}}(y_l|x)} \right) \right]$$
 
+### 2.8 AGENT KB: Cross-Domain Experience Knowledge Base, Reason-Retrieve-Refine Loop & Disagreement Gating
+To enable universal cross-domain experience sharing and eliminate redundant trial-and-error discovery across heterogeneous puzzle instances, the sovereign hyper-cortex incorporates AGENT KB (Tang et al., Yale / OPPO / Stanford / Google DeepMind, 2025):
+1. **Universal Experience Representation**:
+   $$E = \langle \pi, \gamma, S, C \rangle$$
+   where $\pi$ represents the task embedding, $\gamma$ denotes goal constraints, $S = \{(a_i, r_i)\}$ stores action-reasoning pairs, and $C$ holds cross-framework tool metadata.
+2. **Two-Stage Reason-Retrieve-Refine Cycle with Hybrid Retrieval**:
+   $$\sigma_i^{\text{hyb}} = \alpha \cdot \tilde{\sigma}_i^{\text{text}} + (1 - \alpha) \cdot \tilde{\sigma}_i^{\text{sem}}, \quad \alpha \in [0, 1]$$
+   operating symmetrically across the **Planning Stage** (seeding high-level workflows) and **Feedback Stage** (targeted error diagnosis).
+3. **Disagreement Gate Mechanism**:
+   $$\mathcal{G}(\rho, \rho') = \mathbb{1}[\cos(\phi(\rho), \phi(\rho')) \ge \beta], \quad \beta = 0.8$$
+   which guarantees that external experience injection preserves logical stability and never causes reasoning drift or hallucination interference.
+4. **Adaptive Utility Eviction**:
+   $$u_j \leftarrow u_j + \eta (r_j - u_j)$$
+
 ---
 
 ## 3. High-Throughput Inference Engine (Blackwell SGLang Stack)
@@ -123,7 +137,7 @@ $$\text{Throughput}_{\text{SGLang}} \ge 500\text{ tokens/sec}, \quad \text{TTFT}
 ---
 
 ## 5. Conclusion
-The **Sovereign Autonomous Hyper-Cortex** resolves the fundamental tension between computational throughput, memory sycophancy, unguided zero-shot reasoning, unanswerable hallucination, and multi-step search failure in ARC-AGI-3. By marrying **MemAdapter**, **Agent-Instruct Steering**, **AGent Unanswerability Filtering**, **Agent Symbolic Learning (ASL)**, **Agent Q Guided MCTS**, **OaTTT Hindsight Pruning**, and **Blackwell SGLang**, we establish a mathematically grounded, highly scalable architecture for frontier artificial general intelligence.
+The **Sovereign Autonomous Hyper-Cortex** resolves the fundamental tension between computational throughput, memory sycophancy, unguided zero-shot reasoning, unanswerable hallucination, multi-step search failure, and isolated experience silos in ARC-AGI-3. By marrying **MemAdapter**, **Agent-Instruct Steering**, **AGent Unanswerability Filtering**, **Agent Symbolic Learning (ASL)**, **Agent Q Guided MCTS**, **AGENT KB Cross-Domain Memory**, **OaTTT Hindsight Pruning**, and **Blackwell SGLang**, we establish a mathematically grounded, highly scalable architecture for frontier artificial general intelligence.
 
 ---
 
@@ -132,7 +146,8 @@ The **Sovereign Autonomous Hyper-Cortex** resolves the fundamental tension betwe
 2. Tran, S. Q., Do, G. H., Do, P. N. T., Kretchmar, M., & Du, X. (2023). *AGent: A Novel Pipeline for Automatically Creating Unanswerable Questions*. Denison University, UT Dallas, UIT NLP Group.
 3. Zhou, W., Ou, Y., Ding, S., Li, L., Wu, J., Wang, T., Chen, J., Wang, S., Xu, X., Zhang, N., Chen, H., & Jiang, Y. E. (2024). *Symbolic Learning Enables Self-Evolving Agents*. arXiv preprint arXiv:2406.18532 (AIWaves Inc.).
 4. Mills, E., Garg, N., Motwani, S., Finn, C., Garg, D., & Rafailov, R. (2024). *Agent Q: Advanced Reasoning and Learning for Autonomous AI Agents*. arXiv preprint arXiv:2408.07199 (Stanford University / MultiOn).
-5. Chollet, F. (2019). *On the Measure of Intelligence*. arXiv preprint arXiv:1911.01547.
-6. Zheng, L., et al. (2024). *SGLang: Efficient Execution of Structured Language Model Programs*.
-7. Team bkk (2026). *Sovereign Agent Artifacts & Replay Trace Data*. GitHub repository: `https://github.com/nfon41547-hash/arc-prize-2026-sovereign-agent`.
+5. Tang, X., Qin, T., Peng, T., Zhou, Z., Shao, D., Du, T., Wei, X., Xia, P., Wu, F., Zhu, H., Zhang, G., Liu, J., Wang, X., Hong, S., Wu, C., Cheng, H., Wang, C., & Zhou, W. (2025). *AGENT KB: Leveraging Cross-Domain Experience for Agentic Problem Solving*. Yale University, OPPO, Stanford, Google DeepMind, Microsoft Research.
+6. Chollet, F. (2019). *On the Measure of Intelligence*. arXiv preprint arXiv:1911.01547.
+7. Zheng, L., et al. (2024). *SGLang: Efficient Execution of Structured Language Model Programs*.
+8. Team bkk (2026). *Sovereign Agent Artifacts & Replay Trace Data*. GitHub repository: `https://github.com/nfon41547-hash/arc-prize-2026-sovereign-agent`.
 
