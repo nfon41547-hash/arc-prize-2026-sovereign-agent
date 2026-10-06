@@ -94,16 +94,40 @@ class AgentQEngine:
         self,
         grid_before: np.ndarray,
         action: Any,
-        grid_after: np.ndarray
+        grid_after: np.ndarray,
+        recent_hashes: Optional[List[int]] = None
     ) -> float:
-        """Self-Critique Value Function: Evaluates action quality using geometric/heuristic feedback."""
-        # 1. State difference magnitude
-        diff = np.sum(grid_before != grid_after)
-        if diff == 0 and action not in (0, 'noop'):
-            # Ineffective move penalty
-            return -0.5
+        """Sovereign Self-Critique Value Function: Evaluates action quality using geometric, topological, and spatial feedback."""
+        # 1. State difference magnitude (Wall collision & No-op detection)
+        diff = int(np.sum(grid_before != grid_after))
+        if diff == 0:
+            # Hitting a wall, dead click, or ineffective move -> heavy penalty
+            return -0.75
 
-        # 2. Entropy decrease reward (moving towards ordered solved pattern)
+        # 2. Cycle & Oscillation Penalty (Detecting A -> B -> A loops)
+        if recent_hashes is not None:
+            after_hash = hash(grid_after.tobytes())
+            if after_hash in recent_hashes[-6:]:
+                # State revisited within last 6 steps -> severe oscillation penalty
+                return -0.85
+
+        # 3. Spatial Centroid Tracking & Target Distance Reduction
+        # Identify foreground objects (excluding dominant background color)
+        bg_color = int(np.argmax(np.bincount(grid_before.ravel(), minlength=16)))
+        fg_coords_before = np.argwhere(grid_before != bg_color)
+        fg_coords_after = np.argwhere(grid_after != bg_color)
+        
+        spatial_bonus = 0.0
+        if len(fg_coords_before) > 0 and len(fg_coords_after) > 0:
+            # Centroid delta
+            c_before = np.mean(fg_coords_before, axis=0)
+            c_after = np.mean(fg_coords_after, axis=0)
+            centroid_shift = float(np.linalg.norm(c_after - c_before))
+            # Meaningful controlled movement
+            if 0.5 <= centroid_shift <= 5.0:
+                spatial_bonus += 0.3
+
+        # 4. Entropy decrease reward (moving towards ordered solved pattern)
         counts_before = np.bincount(grid_before.ravel(), minlength=16)
         p_b = counts_before[counts_before > 0] / float(grid_before.size)
         ent_before = -float(np.sum(p_b * np.log2(p_b)))
@@ -114,9 +138,9 @@ class AgentQEngine:
 
         entropy_delta = ent_before - ent_after
 
-        # 3. Normalized score in [-1.0, 1.0]
-        base_score = float(np.tanh(entropy_delta * 2.0 + (0.2 if diff > 0 else -0.2)))
-        return base_score
+        # 5. Combined Normalized Score in [-1.0, 1.0]
+        raw_score = entropy_delta * 2.0 + spatial_bonus + (0.25 if diff > 0 else -0.5)
+        return float(np.tanh(raw_score))
 
     def search_and_plan(
         self,
