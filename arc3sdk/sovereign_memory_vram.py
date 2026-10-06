@@ -66,23 +66,38 @@ class SovereignVRAMManager:
     def get_concurrency(self) -> int:
         return self.concurrency
 
+    def zero_waste_clean(self, force: bool = False) -> None:
+        """Perform zero-waste garbage collection and VRAM defragmentation."""
+        now = time.time()
+        if force or (now - self._last_gc > 2.0):
+            try:
+                import torch
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except Exception:
+                pass
+            with contextlib.suppress(Exception):
+                gc.collect()
+            self._last_gc = now
+
     def check_pressure(self) -> float:
         try:
             import torch
             if torch.cuda.is_available():
                 alloc = torch.cuda.memory_allocated(0) / (1024**3)
                 self.pressure = alloc / max(1.0, self.total_gb)
-                # ถ้า pressure >0.85 ลด concurrency ชั่วคราว + empty_cache
-                if self.pressure > 0.85 and time.time() - self._last_gc > 5:
-                    torch.cuda.empty_cache()
-                    with contextlib.suppress(Exception):
-                        gc.collect()
-                    self._last_gc = time.time()
-                    # ลด concurrency ลง 25% ชั่วคราว
-                    self.concurrency = max(8, int(self.concurrency * 0.75))
-                elif self.pressure < 0.60:
-                    # คืน concurrency เมื่อว่าง
-                    base = 48 if self.total_gb >= 80 else (24 if self.total_gb >= 40 else 12)
+                # Multi-tier watermark regulation
+                if self.pressure > 0.92:
+                    # Tier 3 Critical Watermark: immediate hard drain
+                    self.zero_waste_clean(force=True)
+                    self.concurrency = max(6, int(self.concurrency * 0.60))
+                elif self.pressure > 0.85:
+                    # Tier 2 High Watermark: soft throttle and clean
+                    self.zero_waste_clean(force=False)
+                    self.concurrency = max(8, int(self.concurrency * 0.80))
+                elif self.pressure < 0.65:
+                    # Tier 1 Low Watermark: elastic expansion
+                    base = 48 if self.total_gb >= 80 else (28 if self.total_gb >= 40 else 14)
                     self.concurrency = min(base, self.concurrency + 1)
                 return self.pressure
         except Exception:
@@ -90,9 +105,9 @@ class SovereignVRAMManager:
         return 0.0
 
     def optimize_kwargs(self) -> dict[str, Any]:
-        # ส่ง kwargs ให้ vLLM / native ใช้
+        # High-efficiency vLLM / SGLang server parameters
         return {
-            "gpu_memory_utilization": 0.96 if self.total_gb >= 80 else 0.85,
+            "gpu_memory_utilization": 0.92 if self.total_gb >= 40 else 0.85,
             "max_model_len": 32768 if self.total_gb >= 80 else 16384,
             "kv_cache_dtype": "fp8",
             "enable_prefix_caching": True,

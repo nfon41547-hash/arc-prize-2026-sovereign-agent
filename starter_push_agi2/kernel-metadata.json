@@ -1,0 +1,16 @@
+{
+  "id": "bang1850/vibe-xi-omega-arc2",
+  "title": "vibe-xi-omega-arc2",
+  "code_file": "vibe-xi-omega-arc2.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "competition_sources": [
+    "arc-prize-2026-arc-agi-2"
+  ],
+  "dataset_sources": [],
+  "kernel_sources": []
+}

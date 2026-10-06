@@ -105,6 +105,8 @@ MODULE_FILES = [
     # Fable layer (handbook harness core & patch)
     "fable_layer_core.py",
     "fable_layer_patch.py",
+    "hindsight_pruner.py",
+    "adsd_engine.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"
