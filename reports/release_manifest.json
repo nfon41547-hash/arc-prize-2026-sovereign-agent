@@ -110,7 +110,7 @@
       "source_module": "arc3sdk/category_engine.py"
     },
     {
-      "sha256": "58bca787c0ebaec8d546000a000996cdb4ee69e0598f3376d96bf0ea8441dc6a",
+      "sha256": "a50168e97167b8867fd6bc8b6ef03c4013470f5cfd4ae3ab96dd7cece344fe69",
       "source_module": "arc3sdk/skill_orchestrator.py"
     },
     {

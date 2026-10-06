@@ -420,6 +420,18 @@ def evaluate_skills(
         except Exception:
             pass
 
+        # 26) dream_exploration_engine (NVIDIA Dream-Team Structured Clicks & Beam Search)
+        try:
+            from .dream_exploration_engine import DreamExplorationEngine
+            dee = DreamExplorationEngine(beam_width=4, beam_depth=3)
+            # Structured click exploration for Action 6
+            if 6 in available:
+                s_clicks = dee.extract_structured_clicks(g, bg_color=bg, max_clicks=3)
+                for sc_x, sc_y in s_clicks:
+                    proposals.append((6, int(sc_x), int(sc_y), "dream_click", 0.85))
+        except Exception:
+            pass
+
         # Sort by confidence descending, deduplicate, calibrate
         proposals.sort(key=lambda p: -p[4])
         seen: set[tuple[int, int | None, int | None]] = set()

@@ -114,6 +114,7 @@ MODULE_FILES = [
     "agent_q_mcts.py",
     "agent_kb_memory.py",
     "mpc_grounded_debate.py",
+    "dream_exploration_engine.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"
