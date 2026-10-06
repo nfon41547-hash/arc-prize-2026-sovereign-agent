@@ -109,6 +109,9 @@ MODULE_FILES = [
     "adsd_engine.py",
     "memadapter_engine.py",
     "agent_instruct_reasoner.py",
+    "agent_unanswerable_detector.py",
+    "agent_symbolic_learner.py",
+    "agent_q_mcts.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"
