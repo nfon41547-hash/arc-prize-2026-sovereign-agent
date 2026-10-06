@@ -1,0 +1,89 @@
+[{"stream_name":"stderr","time":4.402663391,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":4.402687201,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":4.402689111,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":4.402690321,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":4.7158898019999995,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":4.715909922,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":4.715911702,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":4.715913012,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":5.513335574,"data":"Writing /kaggle/harness-changes.patch\n"}
+,{"stream_name":"stderr","time":5.546944067,"data":"cp: cannot stat '/kaggle/input/datasets/dfranzen/taaf-kaggle-source-bundle-copy': No such file or directory\n"}
+,{"stream_name":"stdout","time":5.556670546,"data":"[!] Notice on git apply ([Errno 2] No such file or directory: '/kaggle/taaf-kaggle-source-share/src'), attempting 3-way or reject fallback...\n"}
+,{"stream_name":"stderr","time":5.557000056,"data":"cp: cannot stat '/kaggle/input/datasets/dfranzen/taaf-kaggle-source-bundle-copy': No such file or directory\n"}
+,{"stream_name":"stderr","time":5.557001476,"data":"\n"}
+,{"stream_name":"stderr","time":5.557002386,"data":"cp: cannot stat '/kaggle/input/datasets/dfranzen/taaf-kaggle-source-bundle-copy': No such file or directory\n"}
+,{"stream_name":"stderr","time":5.790393132,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":5.790400772,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":5.790402562,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":5.790434162,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":5.790440082,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":5.790475112,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":5.790660422,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":5.790663252,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":5.790664242,"data":"Exception encountered at \"In [2]\":\n"}
+,{"stream_name":"stderr","time":5.790665222,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":5.790666102,"data":"FileNotFoundError                         Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":5.790666982,"data":"/tmp/ipykernel_65/2252858047.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":5.790667962,"data":"     31 try:\n"}
+,{"stream_name":"stderr","time":5.790668752,"data":"---\u003e 32     subprocess.run([\"git\", \"apply\", \"--include=ARC3-Inference/*\", \"-v\", \"/kaggle/harness-changes.patch\"], cwd=f\"{BUNDLE_DIR}/src\", check=True)\n"}
+,{"stream_name":"stderr","time":5.790670042,"data":"     33     print('harness patch applied successfully')\n"}
+,{"stream_name":"stderr","time":5.790675772,"data":"\n"}
+,{"stream_name":"stderr","time":5.7906767420000005,"data":"/usr/lib/python3.12/subprocess.py in run(input, capture_output, timeout, check, *popenargs, **kwargs)\n"}
+,{"stream_name":"stderr","time":5.7906776319999995,"data":"    547 \n"}
+,{"stream_name":"stderr","time":5.790678392,"data":"--\u003e 548     with Popen(*popenargs, **kwargs) as process:\n"}
+,{"stream_name":"stderr","time":5.790679252,"data":"    549         try:\n"}
+,{"stream_name":"stderr","time":5.790680032,"data":"\n"}
+,{"stream_name":"stderr","time":5.790681052,"data":"/usr/lib/python3.12/subprocess.py in __init__(self, args, bufsize, executable, stdin, stdout, stderr, preexec_fn, close_fds, shell, cwd, env, universal_newlines, startupinfo, creationflags, restore_signals, start_new_session, pass_fds, user, group, extra_groups, encoding, errors, text, umask, pipesize, process_group)\n"}
+,{"stream_name":"stderr","time":5.790682942,"data":"   1025 \n"}
+,{"stream_name":"stderr","time":5.790683692,"data":"-\u003e 1026             self._execute_child(args, executable, preexec_fn, close_fds,\n"}
+,{"stream_name":"stderr","time":5.7906845019999995,"data":"   1027                                 pass_fds, cwd, env,\n"}
+,{"stream_name":"stderr","time":5.790685372,"data":"\n"}
+,{"stream_name":"stderr","time":5.7906861020000004,"data":"/usr/lib/python3.12/subprocess.py in _execute_child(self, args, executable, preexec_fn, close_fds, pass_fds, cwd, env, startupinfo, creationflags, shell, p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite, restore_signals, gid, gids, uid, umask, start_new_session, process_group)\n"}
+,{"stream_name":"stderr","time":5.790687672,"data":"   1954                     if err_filename is not None:\n"}
+,{"stream_name":"stderr","time":5.790688452,"data":"-\u003e 1955                         raise child_exception_type(errno_num, err_msg, err_filename)\n"}
+,{"stream_name":"stderr","time":5.790689302,"data":"   1956                     else:\n"}
+,{"stream_name":"stderr","time":5.790690212,"data":"\n"}
+,{"stream_name":"stderr","time":5.790690912,"data":"FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/taaf-kaggle-source-share/src'\n"}
+,{"stream_name":"stderr","time":5.790691712,"data":"\n"}
+,{"stream_name":"stderr","time":5.790692392,"data":"During handling of the above exception, another exception occurred:\n"}
+,{"stream_name":"stderr","time":5.790693142,"data":"\n"}
+,{"stream_name":"stderr","time":5.790693832,"data":"FileNotFoundError                         Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":5.790694602,"data":"/tmp/ipykernel_65/2252858047.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":5.790695462,"data":"     34 except Exception as e:\n"}
+,{"stream_name":"stderr","time":5.790696492,"data":"     35     print(f'[!] Notice on git apply ({e}), attempting 3-way or reject fallback...')\n"}
+,{"stream_name":"stderr","time":5.790697372,"data":"---\u003e 36     subprocess.run([\"git\", \"apply\", \"--include=ARC3-Inference/*\", \"-v\", \"--3way\", \"/kaggle/harness-changes.patch\"], cwd=f\"{BUNDLE_DIR}/src\")\n"}
+,{"stream_name":"stderr","time":5.790698492,"data":"     37 \n"}
+,{"stream_name":"stderr","time":5.790699222,"data":"     38 # True only inside a real competition rerun; switches diagnostics + soft deadline.\n"}
+,{"stream_name":"stderr","time":5.790700032,"data":"\n"}
+,{"stream_name":"stderr","time":5.790700712,"data":"/usr/lib/python3.12/subprocess.py in run(input, capture_output, timeout, check, *popenargs, **kwargs)\n"}
+,{"stream_name":"stderr","time":5.790701532,"data":"    546         kwargs['stderr'] = PIPE\n"}
+,{"stream_name":"stderr","time":5.790703532,"data":"    547 \n"}
+,{"stream_name":"stderr","time":5.790704272,"data":"--\u003e 548     with Popen(*popenargs, **kwargs) as process:\n"}
+,{"stream_name":"stderr","time":5.790705072,"data":"    549         try:\n"}
+,{"stream_name":"stderr","time":5.790705782,"data":"    550             stdout, stderr = process.communicate(input, timeout=timeout)\n"}
+,{"stream_name":"stderr","time":5.790706582,"data":"\n"}
+,{"stream_name":"stderr","time":5.790707332,"data":"/usr/lib/python3.12/subprocess.py in __init__(self, args, bufsize, executable, stdin, stdout, stderr, preexec_fn, close_fds, shell, cwd, env, universal_newlines, startupinfo, creationflags, restore_signals, start_new_session, pass_fds, user, group, extra_groups, encoding, errors, text, umask, pipesize, process_group)\n"}
+,{"stream_name":"stderr","time":5.790708292,"data":"   1024                             encoding=encoding, errors=errors)\n"}
+,{"stream_name":"stderr","time":5.790709072,"data":"   1025 \n"}
+,{"stream_name":"stderr","time":5.790709782,"data":"-\u003e 1026             self._execute_child(args, executable, preexec_fn, close_fds,\n"}
+,{"stream_name":"stderr","time":5.790710582,"data":"   1027                                 pass_fds, cwd, env,\n"}
+,{"stream_name":"stderr","time":5.790711342,"data":"   1028                                 startupinfo, creationflags, shell,\n"}
+,{"stream_name":"stderr","time":5.790712152,"data":"\n"}
+,{"stream_name":"stderr","time":5.790712882,"data":"/usr/lib/python3.12/subprocess.py in _execute_child(self, args, executable, preexec_fn, close_fds, pass_fds, cwd, env, startupinfo, creationflags, shell, p2cread, p2cwrite, c2pread, c2pwrite, errread, errwrite, restore_signals, gid, gids, uid, umask, start_new_session, process_group)\n"}
+,{"stream_name":"stderr","time":5.790713882,"data":"   1953                         err_msg = os.strerror(errno_num)\n"}
+,{"stream_name":"stderr","time":5.790714652,"data":"   1954                     if err_filename is not None:\n"}
+,{"stream_name":"stderr","time":5.790715422,"data":"-\u003e 1955                         raise child_exception_type(errno_num, err_msg, err_filename)\n"}
+,{"stream_name":"stderr","time":5.790716242,"data":"   1956                     else:\n"}
+,{"stream_name":"stderr","time":5.790716992,"data":"   1957                         raise child_exception_type(errno_num, err_msg)\n"}
+,{"stream_name":"stderr","time":5.790717792,"data":"\n"}
+,{"stream_name":"stderr","time":5.790718502,"data":"FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/taaf-kaggle-source-share/src'\n"}
+,{"stream_name":"stderr","time":5.790719312,"data":"\n"}
+,{"stream_name":"stderr","time":6.93018448,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":6.93020445,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":7.012160245,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":7.012171335,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":7.315354898,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":7.461486281,"data":"[NbConvertApp] Writing 676727 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":8.576577633,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":9.377053904,"data":"[NbConvertApp] Writing 2284914 bytes to __results__.html\n"}
+]

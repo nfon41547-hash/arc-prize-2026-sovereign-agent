@@ -12,10 +12,8 @@
     "gpu"
   ],
   "dataset_sources": [
-    "bang1850/arc3-sovereign-team-data",
-    "bang1850/arc3sdk-runtime-v32-hardening",
-    "keithtyser/duck-qwen38-nvfp4-mtp-vllm-smoke-v1",
-    "keithtyser/qwen38-flash-next-vllm-nvfp4-runtime-v1",
+    "dfranzen/pennyroyal-v253",
+    "dfranzen/taaf-kaggle-source-bundle-copy",
     "bang1850/arc3-27b-boot"
   ],
   "kernel_sources": [],

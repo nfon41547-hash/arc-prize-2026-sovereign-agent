@@ -1,0 +1,79 @@
+[{"stream_name":"stderr","time":8.839756704,"data":"/usr/local/lib/python3.12/dist-packages/nbformat/__init__.py:96: MissingIDFieldWarning: Cell is missing an id field, this will become a hard error in future nbformat versions. You may want to use `normalize()` on your notebooks before validations (available since nbformat 5.1.4). Previous versions of nbformat are fixing this issue transparently, and will stop doing so in the future.\n"}
+,{"stream_name":"stderr","time":8.839816009,"data":"  validate(nb)\n"}
+,{"stream_name":"stderr","time":10.079722324,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.079758013,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.079764468,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.079768934,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":10.960325027,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.960368584,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.960375521,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.960380817,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":12.42422162,"data":"[*] Global deadline: 1791322369.1664217\n"}
+,{"stream_name":"stdout","time":12.442898317,"data":"Writing symbolic_morphism.py\n"}
+,{"stream_name":"stdout","time":12.465773114,"data":"Writing arc_loader.py\n"}
+,{"stream_name":"stdout","time":12.484290101,"data":"Writing arc_decoder.py\n"}
+,{"stream_name":"stdout","time":12.509480001,"data":"Writing arc_solver.py\n"}
+,{"stream_name":"stdout","time":12.526833058,"data":"Writing starter.py\n"}
+,{"stream_name":"stdout","time":20.775584921,"data":"W1006 09:42:57.472000 37 torch/multiprocessing/spawn.py:165] Terminating process 50 via signal SIGTERM\r\n"}
+,{"stream_name":"stdout","time":20.775625202,"data":"W1006 09:42:57.475000 37 torch/multiprocessing/spawn.py:165] Terminating process 51 via signal SIGTERM\r\n"}
+,{"stream_name":"stdout","time":20.775631612,"data":"W1006 09:42:57.476000 37 torch/multiprocessing/spawn.py:165] Terminating process 52 via signal SIGTERM\r\n"}
+,{"stream_name":"stdout","time":20.775636825,"data":"Traceback (most recent call last):\r\n"}
+,{"stream_name":"stdout","time":20.775641866,"data":"  File \"/kaggle/working/starter.py\", line 58, in \u003cmodule\u003e\r\n"}
+,{"stream_name":"stdout","time":20.775646573,"data":"    mp.spawn(local_worker, args=(queue, args.end_time), nprocs=4)\r\n"}
+,{"stream_name":"stdout","time":20.775649667,"data":"  File \"/usr/local/lib/python3.12/dist-packages/torch/multiprocessing/spawn.py\", line 340, in spawn\r\n"}
+,{"stream_name":"stdout","time":20.775652985,"data":"    return start_processes(fn, args, nprocs, join, daemon, start_method=\"spawn\")\r\n"}
+,{"stream_name":"stdout","time":20.775656236,"data":"           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n"}
+,{"stream_name":"stdout","time":20.775659318,"data":"  File \"/usr/local/lib/python3.12/dist-packages/torch/multiprocessing/spawn.py\", line 296, in start_processes\r\n"}
+,{"stream_name":"stdout","time":20.775662495,"data":"    while not context.join():\r\n"}
+,{"stream_name":"stdout","time":20.775665386,"data":"              ^^^^^^^^^^^^^^\r\n"}
+,{"stream_name":"stdout","time":20.775668457,"data":"  File \"/usr/local/lib/python3.12/dist-packages/torch/multiprocessing/spawn.py\", line 211, in join\r\n"}
+,{"stream_name":"stdout","time":20.775689049,"data":"    raise ProcessRaisedException(msg, error_index, failed_process.pid)\r\n"}
+,{"stream_name":"stdout","time":20.775693973,"data":"torch.multiprocessing.spawn.ProcessRaisedException: \r\n"}
+,{"stream_name":"stdout","time":20.775698682,"data":"\r\n"}
+,{"stream_name":"stdout","time":20.7757033,"data":"-- Process 0 terminated with the following error:\r\n"}
+,{"stream_name":"stdout","time":20.775708053,"data":"Traceback (most recent call last):\r\n"}
+,{"stream_name":"stdout","time":20.775712542,"data":"  File \"/usr/local/lib/python3.12/dist-packages/torch/multiprocessing/spawn.py\", line 87, in _wrap\r\n"}
+,{"stream_name":"stdout","time":20.77571743,"data":"    fn(i, *args)\r\n"}
+,{"stream_name":"stdout","time":20.775721962,"data":"  File \"/kaggle/working/starter.py\", line 20, in local_worker\r\n"}
+,{"stream_name":"stdout","time":20.775726488,"data":"    from arc_solver import worker\r\n"}
+,{"stream_name":"stdout","time":20.775730687,"data":"  File \"/kaggle/working/arc_solver.py\", line 1, in \u003cmodule\u003e\r\n"}
+,{"stream_name":"stdout","time":20.775735882,"data":"    from unsloth import FastLanguageModel, UnslothTrainingArguments, UnslothTrainer\r\n"}
+,{"stream_name":"stdout","time":20.775740934,"data":"ModuleNotFoundError: No module named 'unsloth'\r\n"}
+,{"stream_name":"stdout","time":20.775745628,"data":"\r\n"}
+,{"stream_name":"stdout","time":51.891295132,"data":"*** Load solutions from '/kaggle/input/competitions/arc-prize-2026-arc-agi-2/arc-agi_evaluation_solutions.json'...\n"}
+,{"stream_name":"stderr","time":54.383472965,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":54.383523132,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":54.383531409,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":54.383566572,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":54.383639842,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":54.38384683,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":54.38405989,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":54.384072049,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":54.384078518,"data":"Exception encountered at \"In [8]\":\n"}
+,{"stream_name":"stderr","time":54.384084722,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":54.384116389,"data":"FileNotFoundError                         Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":54.384126033,"data":"/tmp/ipykernel_16/490131940.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":54.384132321,"data":"     14 decoder = ArcDecoder(data.split_multi_replies(), n_guesses=2)\n"}
+,{"stream_name":"stderr","time":54.3841382,"data":"     15 \n"}
+,{"stream_name":"stderr","time":54.384143922,"data":"---\u003e 16 decoder.load_decoded_results(\"/kaggle/inference_outputs\")\n"}
+,{"stream_name":"stderr","time":54.384150013,"data":"     17 \n"}
+,{"stream_name":"stderr","time":54.384155662,"data":"     18 submission = data.get_submission(decoder.run_selection_algo())\n"}
+,{"stream_name":"stderr","time":54.384161513,"data":"\n"}
+,{"stream_name":"stderr","time":54.384180875,"data":"/kaggle/working/arc_decoder.py in load_decoded_results(self, store, run_name)\n"}
+,{"stream_name":"stderr","time":54.384186136,"data":"     50 \n"}
+,{"stream_name":"stderr","time":54.384190702,"data":"     51     def load_decoded_results(self, store, run_name=\"\"):\n"}
+,{"stream_name":"stderr","time":54.384195643,"data":"---\u003e 52         for key in os.listdir(store):\n"}
+,{"stream_name":"stderr","time":54.384200431,"data":"     53             with bz2.BZ2File(os.path.join(store, key)) as f:\n"}
+,{"stream_name":"stderr","time":54.384205076,"data":"     54                 outputs = pickle.load(f)\n"}
+,{"stream_name":"stderr","time":54.384209763,"data":"\n"}
+,{"stream_name":"stderr","time":54.384214101,"data":"FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/inference_outputs'\n"}
+,{"stream_name":"stderr","time":54.384219049,"data":"\n"}
+,{"stream_name":"stderr","time":57.337799396,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":57.337840169,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":57.560993185,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":57.561023343,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":58.488608316,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":58.909302425999996,"data":"[NbConvertApp] Writing 62909 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":62.272736963,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":63.504703777,"data":"[NbConvertApp] Writing 504223 bytes to __results__.html\n"}
+]

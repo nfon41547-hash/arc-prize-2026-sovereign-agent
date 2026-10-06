@@ -520,7 +520,12 @@ class Ledger:
         if extra:
             text += " Other keys used: " + ", ".join(extra[:4]) + "."
         if clear_actions:
-            text += " The last actions before clearing it: " + " ".join(clear_actions[-10:]) + "."
+            from .hindsight_pruner import EpisodicHindsightPruner
+            pruned_digest = EpisodicHindsightPruner.format_pruned_digest([{"action": a} for a in clear_actions])
+            if pruned_digest:
+                text += f" Verified causal route: [{pruned_digest}]."
+            else:
+                text += " The last actions before clearing it: " + " ".join(clear_actions[-10:]) + "."
         return [text]
 
 

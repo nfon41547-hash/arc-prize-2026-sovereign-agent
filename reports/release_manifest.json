@@ -58,7 +58,7 @@
       "source_module": "arc3sdk/unified_consensus_engine.py"
     },
     {
-      "sha256": "965287c679fd97f6d756cbd9a872bee6fbd8927c590a3ba1f180331079be29a0",
+      "sha256": "227b73878634392f19aa7078ebaa05e38f0459739fe0e7c0a681f78b9309e40c",
       "source_module": "arc3sdk/sovereign_memory_vram.py"
     },
     {

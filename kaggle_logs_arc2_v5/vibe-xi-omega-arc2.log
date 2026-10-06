@@ -1,0 +1,22 @@
+[{"stream_name":"stderr","time":8.303728879,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.303787529,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.303793139,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.303796439,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.052989641,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.053034085,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.053038162,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.053041071,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":10.560967153,"data":"[*] Initializing Sovereign ARC-AGI-2 High-Throughput Solver...\n"}
+,{"stream_name":"stdout","time":10.561028872,"data":"[*] Reading challenges from: /kaggle/input/competitions/arc-prize-2026-arc-agi-2/arc-agi_test_challenges.json\n"}
+,{"stream_name":"stdout","time":10.561036022,"data":"[*] Solving 240 tasks...\n"}
+,{"stream_name":"stdout","time":10.829726078,"data":"[+] Solved 240 tasks in 0.31s (766.4 tasks/sec)\n"}
+,{"stream_name":"stdout","time":10.829780383,"data":"[+] submission.json created successfully (374900 bytes).\n"}
+,{"stream_name":"stderr","time":14.141305689,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":14.141365792,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":14.333677657,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":14.333711136,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":15.201117237,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":15.589877382,"data":"[NbConvertApp] Writing 15244 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":18.685570127,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":19.738172489,"data":"[NbConvertApp] Writing 331223 bytes to __results__.html\n"}
+]

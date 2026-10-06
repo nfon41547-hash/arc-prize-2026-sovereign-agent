@@ -1,0 +1,28 @@
+[{"stream_name":"stderr","time":8.107122146,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.107280082,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.107292788,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.107295737,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.836059505,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.836095344,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.836101008,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.836104608,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":10.07760026,"data":"[+] Sovereign Academic Paper exported successfully to /kaggle/working/arc_prize_2026_sovereign_paper.md (7282 bytes)\n"}
+,{"stream_name":"stdout","time":10.077645369,"data":"[+] Verified Paper Track submission artifact created at /kaggle/working/submission.csv\n"}
+,{"stream_name":"stderr","time":10.078927182,"data":"\u003c\u003e:21: SyntaxWarning: invalid escape sequence '\\D'\n"}
+,{"stream_name":"stderr","time":10.078957728,"data":"\u003c\u003e:21: SyntaxWarning: invalid escape sequence '\\D'\n"}
+,{"stream_name":"stderr","time":10.078964035,"data":"/tmp/ipykernel_16/1467296078.py:21: SyntaxWarning: invalid escape sequence '\\D'\n"}
+,{"stream_name":"stderr","time":10.078968634,"data":"  1. **MemAdapter (Counterfactual Adaptation Engine)**: Eliminates memory-induced sycophancy via counterfactual induction, context-aware confidence decay, and physical evidence-grounded action gating ($\\Delta\\Phi \u003e 0$).\n"}
+,{"stream_name":"stderr","time":10.078974872,"data":"\n"}
+,{"stream_name":"stderr","time":10.078978634,"data":"\u003c\u003e:21: SyntaxWarning: invalid escape sequence '\\D'\n"}
+,{"stream_name":"stderr","time":10.078982754,"data":"\u003c\u003e:21: SyntaxWarning: invalid escape sequence '\\D'\n"}
+,{"stream_name":"stderr","time":10.078986805,"data":"/tmp/ipykernel_16/1467296078.py:21: SyntaxWarning: invalid escape sequence '\\D'\n"}
+,{"stream_name":"stderr","time":10.078991045,"data":"  1. **MemAdapter (Counterfactual Adaptation Engine)**: Eliminates memory-induced sycophancy via counterfactual induction, context-aware confidence decay, and physical evidence-grounded action gating ($\\Delta\\Phi \u003e 0$).\n"}
+,{"stream_name":"stderr","time":13.258397759,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":13.258433659,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":13.450146755,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":13.45017339,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":14.38434111,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":14.474275583,"data":"[NbConvertApp] Writing 20566 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":17.619080467,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":18.235749378,"data":"[NbConvertApp] Writing 300843 bytes to __results__.html\n"}
+]
