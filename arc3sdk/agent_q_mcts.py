@@ -90,6 +90,31 @@ class AgentQEngine:
         self.beta_dpo = beta_dpo
         self.preference_dataset: List[DPOPreferencePair] = []
 
+    @staticmethod
+    def _compute_d4_symmetry_score(grid: np.ndarray) -> float:
+        """Computes D4 Dihedral Group Symmetry Score (Horizontal, Vertical, Diagonals, Rotations)."""
+        if grid.size == 0:
+            return 0.0
+        h_sym = float(np.mean(grid == np.flipud(grid)))
+        v_sym = float(np.mean(grid == np.fliplr(grid)))
+        d1_sym = float(np.mean(grid == grid.T)) if grid.shape[0] == grid.shape[1] else 0.0
+        d2_sym = float(np.mean(grid == np.fliplr(np.flipud(grid)).T)) if grid.shape[0] == grid.shape[1] else 0.0
+        rot180 = float(np.mean(grid == np.rot90(grid, 2)))
+        return (h_sym + v_sym + d1_sym + d2_sym + rot180) / 5.0
+
+    @staticmethod
+    def _compute_mdl_complexity(grid: np.ndarray) -> float:
+        """Estimates Kolmogorov Complexity via 2D Run-Length and Block Periodicity Compression."""
+        if grid.size == 0:
+            return 0.0
+        # Row transitions
+        row_diffs = np.sum(grid[:, :-1] != grid[:, 1:]) if grid.shape[1] > 1 else 0
+        # Col transitions
+        col_diffs = np.sum(grid[:-1, :] != grid[1:, :]) if grid.shape[0] > 1 else 0
+        total_transitions = float(row_diffs + col_diffs)
+        max_possible = float(grid.size * 2)
+        return total_transitions / max(1.0, max_possible)
+
     def evaluate_critique(
         self,
         grid_before: np.ndarray,
@@ -97,37 +122,30 @@ class AgentQEngine:
         grid_after: np.ndarray,
         recent_hashes: Optional[List[int]] = None
     ) -> float:
-        """Sovereign Self-Critique Value Function: Evaluates action quality using geometric, topological, and spatial feedback."""
-        # 1. State difference magnitude (Wall collision & No-op detection)
+        """Sovereign Self-Critique Value Function: Evaluates abstract reasoning quality via MDL, D4 symmetry, and topological invariants."""
+        # 1. No-op / Wall collision detection
         diff = int(np.sum(grid_before != grid_after))
         if diff == 0:
-            # Hitting a wall, dead click, or ineffective move -> heavy penalty
             return -0.75
 
-        # 2. Cycle & Oscillation Penalty (Detecting A -> B -> A loops)
+        # 2. Anti-Oscillation Penalty (A -> B -> A loop prevention)
         if recent_hashes is not None:
             after_hash = hash(grid_after.tobytes())
             if after_hash in recent_hashes[-6:]:
-                # State revisited within last 6 steps -> severe oscillation penalty
                 return -0.85
 
-        # 3. Spatial Centroid Tracking & Target Distance Reduction
-        # Identify foreground objects (excluding dominant background color)
-        bg_color = int(np.argmax(np.bincount(grid_before.ravel(), minlength=16)))
-        fg_coords_before = np.argwhere(grid_before != bg_color)
-        fg_coords_after = np.argwhere(grid_after != bg_color)
-        
-        spatial_bonus = 0.0
-        if len(fg_coords_before) > 0 and len(fg_coords_after) > 0:
-            # Centroid delta
-            c_before = np.mean(fg_coords_before, axis=0)
-            c_after = np.mean(fg_coords_after, axis=0)
-            centroid_shift = float(np.linalg.norm(c_after - c_before))
-            # Meaningful controlled movement
-            if 0.5 <= centroid_shift <= 5.0:
-                spatial_bonus += 0.3
+        # 3. Minimum Description Length (MDL) / Kolmogorov Complexity Gain
+        # A good ARC transformation forms structured regularities and reduces descriptive complexity
+        mdl_before = self._compute_mdl_complexity(grid_before)
+        mdl_after = self._compute_mdl_complexity(grid_after)
+        mdl_gain = mdl_before - mdl_after  # Positive when grid becomes more structured/regular
 
-        # 4. Entropy decrease reward (moving towards ordered solved pattern)
+        # 4. D4 Dihedral Symmetry Emergence / Restoration
+        sym_before = self._compute_d4_symmetry_score(grid_before)
+        sym_after = self._compute_d4_symmetry_score(grid_after)
+        sym_delta = sym_after - sym_before
+
+        # 5. Shannon Entropy of Symbolic Tokens
         counts_before = np.bincount(grid_before.ravel(), minlength=16)
         p_b = counts_before[counts_before > 0] / float(grid_before.size)
         ent_before = -float(np.sum(p_b * np.log2(p_b)))
@@ -138,9 +156,14 @@ class AgentQEngine:
 
         entropy_delta = ent_before - ent_after
 
-        # 5. Combined Normalized Score in [-1.0, 1.0]
-        raw_score = entropy_delta * 2.0 + spatial_bonus + (0.25 if diff > 0 else -0.5)
-        return float(np.tanh(raw_score))
+        # 6. Combined Sovereign Abstract Reasoning Metric (Zero-Greedy Centroid Bias)
+        abstract_score = (
+            2.5 * mdl_gain +          # Algorithmic regularity gain
+            2.0 * sym_delta +         # D4 Symmetry restoration
+            1.0 * entropy_delta +     # Symbolic token ordering
+            (0.15 if diff > 0 else -0.5)
+        )
+        return float(np.tanh(abstract_score))
 
     def search_and_plan(
         self,
