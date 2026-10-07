@@ -117,6 +117,7 @@ MODULE_FILES = [
     "dream_exploration_engine.py",
     "policy_manifold_reflection.py",
     "auto_aligned_interface.py",
+    "symplectic_geodesic_engine.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"
