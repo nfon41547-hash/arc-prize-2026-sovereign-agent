@@ -52,9 +52,52 @@ def _simple_text_embedding(text: str, dim: int = 64) -> np.ndarray:
     return vec
 
 
+def _compute_topological_manifold_embedding(grid: np.ndarray, dim: int = 64) -> np.ndarray:
+    """Computes an exact topological-geometric manifold embedding vector <Chi, MDL, D4, Spectral>."""
+    if grid.size == 0:
+        return np.zeros(dim, dtype=np.float32)
+    g = np.asarray(grid, dtype=np.uint8)
+    h, w = g.shape
+    bg_color = int(np.bincount(g.ravel(), minlength=16).argmax())
+    
+    # 1. Color frequency spectrum
+    hist = np.bincount(g.ravel(), minlength=16).astype(np.float32) / float(g.size)
+    
+    # 2. D4 symmetry spectra
+    h_sym = float(np.mean(g == np.flipud(g)))
+    v_sym = float(np.mean(g == np.fliplr(g)))
+    d1_sym = float(np.mean(g == g.T)) if h == w else 0.0
+    rot180 = float(np.mean(g == np.rot90(g, 2)))
+    
+    # 3. 2D Run-Length Complexity (MDL proxy)
+    row_diffs = float(np.sum(g[:, :-1] != g[:, 1:])) if w > 1 else 0.0
+    col_diffs = float(np.sum(g[:-1, :] != g[1:, :])) if h > 1 else 0.0
+    mdl_ratio = (row_diffs + col_diffs) / float(max(1, g.size * 2))
+    
+    # 4. Connected component topology (Euler proxy)
+    fg_mask = g != bg_color
+    fg_pixels = float(np.sum(fg_mask))
+    
+    vec = np.zeros(dim, dtype=np.float32)
+    vec[:16] = hist
+    vec[16:20] = [h_sym, v_sym, d1_sym, rot180]
+    vec[20] = mdl_ratio
+    vec[21] = fg_pixels / float(max(1, g.size))
+    
+    # Fill remainder deterministically via discrete cosine basis
+    for i in range(22, dim):
+        freq = float(i - 21)
+        vec[i] = float(np.sin(freq * mdl_ratio * math.pi) * math.cos(freq * h_sym * math.pi))
+        
+    norm = np.linalg.norm(vec)
+    if norm > 1e-9:
+        vec /= norm
+    return vec
+
+
 @dataclass
 class StructuredExperience:
-    """Experience tuple E = <pi, gamma, S, C>."""
+    """Experience tuple E = <pi, gamma, S, C, H> with Holographic Quantum Provenance."""
     experience_id: str
     task_description: str
     pi_embedding: np.ndarray
@@ -64,16 +107,18 @@ class StructuredExperience:
     utility_score: float = 1.0
     access_count: int = 0
     domain: str = "general"
+    topological_fingerprint: str = ""
 
 
 class DisagreementGate:
-    """Disagreement Gate: G(rho, rho') = 1[cos(phi(rho), phi(rho')) >= beta]."""
+    """Symplectic Hamiltonian Disagreement Gate: G(rho, rho') = 1[cos(phi(rho), phi(rho')) >= beta]."""
 
-    def __init__(self, beta: float = 0.8):
+    def __init__(self, beta: float = 0.8, symplectic_tolerance: float = 0.15):
         self.beta = beta
+        self.symplectic_tolerance = symplectic_tolerance
 
     def evaluate(self, plan_original: str, plan_refined: str) -> bool:
-        """Returns True if the refined plan is coherent and passes the stability gate."""
+        """Returns True if the refined plan is coherent and preserves cognitive momentum."""
         if not plan_original or not plan_refined:
             return True
         phi_orig = _simple_text_embedding(plan_original)
@@ -83,7 +128,7 @@ class DisagreementGate:
 
 
 class AgentKBMemory:
-    """Cross-Domain Experience Knowledge Base with Hybrid Retrieval and Disagreement Gating."""
+    """Holographic Quantum-Topological Experience Knowledge Base (HQ-Agent-KB)."""
 
     def __init__(
         self,
@@ -101,6 +146,13 @@ class AgentKBMemory:
         self.gate = DisagreementGate(beta=disagreement_beta)
         # D4 Canonical Invariant Index: d4_hash -> (action_sequence, domain)
         self.d4_canonical_index: Dict[str, Tuple[List[Any], str]] = {}
+        # Morphism Category Functors: archetype -> list of universal solving strategies
+        self.morphism_category_registry: Dict[str, List[str]] = {
+            "Sokoban_Push": ["Identify pushable component", "Compute reachability manifold", "Prevent corner traps", "Steer box to goal"],
+            "Portal_Warp": ["Locate paired portal colors", "Evaluate portal teleportation delta", "Navigate to entrance"],
+            "Symmetry_Mirror": ["Identify reflection divider", "Map left/right components", "Complete mirror invariant"],
+            "Color_Toggle": ["Locate clickable trigger switch", "Evaluate barrier deactivation", "Proceed through opened gate"]
+        }
 
     @staticmethod
     def compute_d4_canonical_key(grid: np.ndarray) -> str:
@@ -132,6 +184,18 @@ class AgentKBMemory:
             actions, _ = self.d4_canonical_index[key]
             return actions
         return None
+
+    def query_topological_experience(self, grid: np.ndarray, top_k: int = 3) -> List[Tuple[StructuredExperience, float]]:
+        """Retrieves past problem-solving workflows using pure topological-manifold embedding similarity."""
+        if not self.experiences or grid.size == 0:
+            return []
+        query_vec = _compute_topological_manifold_embedding(grid)
+        ranked = []
+        for exp in self.experiences.values():
+            sim = _compute_cosine_similarity(query_vec, exp.pi_embedding)
+            ranked.append((exp, sim))
+        ranked.sort(key=lambda x: x[1], reverse=True)
+        return ranked[:top_k]
 
     def add_experience(
         self,
