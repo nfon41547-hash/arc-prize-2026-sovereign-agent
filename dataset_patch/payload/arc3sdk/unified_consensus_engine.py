@@ -107,6 +107,22 @@ class SovereignGrandmasterKernel:
         except Exception:
             pass
 
+        # Auto-Aligned Interface Adapter (ALIGN-ARC)
+        self._auto_interface = None
+        try:
+            from .auto_aligned_interface import AutoAlignedInterfaceEngine
+            self._auto_interface = AutoAlignedInterfaceEngine()
+        except Exception:
+            pass
+
+        # Policy Manifold Reflection Engine (H-PMR / Sovereign Agent-Pro Omega)
+        self._policy_manifold = None
+        try:
+            from .policy_manifold_reflection import PolicyManifoldReflectionEngine
+            self._policy_manifold = PolicyManifoldReflectionEngine()
+        except Exception:
+            pass
+
     def get_flux_planner(self):
         if self._flux_planner is None:
             try:
