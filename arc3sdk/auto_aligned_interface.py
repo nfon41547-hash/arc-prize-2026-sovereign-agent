@@ -63,7 +63,13 @@ class AutoAlignedInterfaceEngine:
 
     def infer_rules(self, initial_grid: List[List[int]]) -> StaticEnvironmentRules:
         """INFER_ARC_INVARIANTS: Static extraction of 2D grid rules and palette."""
-        if not initial_grid or not initial_grid[0]:
+        if initial_grid is None:
+            rules = StaticEnvironmentRules(0, 0, set(), set(), 0, False, "Empty Grid")
+            self.static_rules = rules
+            return rules
+        if hasattr(initial_grid, 'tolist'):
+            initial_grid = initial_grid.tolist()
+        if len(initial_grid) == 0 or len(initial_grid[0]) == 0:
             rules = StaticEnvironmentRules(0, 0, set(), set(), 0, False, "Empty Grid")
             self.static_rules = rules
             return rules

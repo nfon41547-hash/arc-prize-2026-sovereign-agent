@@ -66,7 +66,19 @@ class PolicyManifoldReflectionEngine:
         goal_colors: Optional[List[int]] = None,
     ) -> BeliefManifold:
         """Compute topological differential invariants for the current state."""
-        if not grid or not grid[0]:
+        if grid is None:
+            return BeliefManifold(
+                euler_characteristic=0,
+                mdl_complexity=0.0,
+                d4_symmetry_index=0,
+                kinematic_player_color=player_color,
+                goal_sink_colors=tuple(goal_colors or []),
+                estimated_entropy=0.0,
+                epistemic_confidence=0.5,
+            )
+        if hasattr(grid, 'tolist'):
+            grid = grid.tolist()
+        if len(grid) == 0 or len(grid[0]) == 0:
             return BeliefManifold(
                 euler_characteristic=0,
                 mdl_complexity=0.0,

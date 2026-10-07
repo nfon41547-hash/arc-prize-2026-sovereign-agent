@@ -24,6 +24,18 @@ from arc3sdk.unified_consensus_engine import SovereignGrandmasterKernel
 logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 logger = logging.getLogger("Full25Benchmark")
 
+def _extract_grid(frame_obj) -> List[List[int]]:
+    if hasattr(frame_obj, 'frame') and isinstance(frame_obj.frame, list) and len(frame_obj.frame) > 0:
+        return frame_obj.frame[0]
+    if hasattr(frame_obj, 'grid') and isinstance(frame_obj.grid, list):
+        return frame_obj.grid
+    if isinstance(frame_obj, dict):
+        if 'frame' in frame_obj and isinstance(frame_obj['frame'], list) and len(frame_obj['frame']) > 0:
+            return frame_obj['frame'][0]
+        if 'grid' in frame_obj:
+            return frame_obj['grid']
+    return [[]]
+
 def run_full_25_benchmark():
     arcade = arc_agi.Arcade()
     envs = arcade.get_environments()
@@ -49,7 +61,7 @@ def run_full_25_benchmark():
             kernel = SovereignGrandmasterKernel()
 
             # Extract static domain metadata & invariants
-            grid_list = initial_frame.grid
+            grid_list = _extract_grid(initial_frame)
             h = len(grid_list)
             w = len(grid_list[0]) if h > 0 else 0
             
@@ -59,8 +71,7 @@ def run_full_25_benchmark():
                 "grid_shape": (h, w),
                 "available_actions": avail_actions
             }
-            raw_initial_dict = initial_frame.dict() if hasattr(initial_frame, 'dict') else initial_frame.__dict__
-            invariants = align.infer_invariants(raw_initial_dict, meta)
+            invariants = align.infer_rules(grid_list)
 
             frame = initial_frame
             step_count = 0
@@ -84,7 +95,7 @@ def run_full_25_benchmark():
 
             while step_count < max_steps:
                 step_count += 1
-                raw_frame_dict = frame.dict() if hasattr(frame, 'dict') else frame.__dict__
+                cur_grid = _extract_grid(frame)
                 
                 # Level check
                 frame_lvl = getattr(frame, 'level', 0)
@@ -92,12 +103,6 @@ def run_full_25_benchmark():
                     logger.info(f"  -> Level Advanced: {current_level} -> {frame_lvl} at step {step_count}")
                     level_transitions.append((current_level, frame_lvl, step_count))
                     current_level = frame_lvl
-
-                # 1. ALIGN: Auto-aligned observation wrapping
-                aligned_obs = align.wrap_step(raw_frame_dict, prev_action="ACTION1" if step_count > 1 else "RESET")
-
-                # 2. S-GWE: Analytical Riemannian Geodesic Flow
-                cur_grid = frame.grid
                 cur_h = len(cur_grid)
                 cur_w = len(cur_grid[0]) if cur_h > 0 else 0
 
@@ -116,7 +121,7 @@ def run_full_25_benchmark():
                 )
 
                 # 3. Policy Manifold Reflection
-                pmr_proposal = pmr.reflect_state(cur_grid, context={"game_id": game_id, "step": step_count})
+                belief = pmr.compute_belief_manifold(cur_grid, player_color=player_color, goal_colors=list(goal_colors))
 
                 # 4. Action Selection
                 action_candidates = [a for a in env.action_space if a.name not in ["RESET"]]
@@ -128,12 +133,6 @@ def run_full_25_benchmark():
                     target_name = name_map.get(next_move, "ACTION1")
                     for act in env.action_space:
                         if act.name == target_name:
-                            selected_action = act
-                            break
-                elif pmr_proposal.optimal_action in ["1", "2", "3", "4", "5"]:
-                    act_num = pmr_proposal.optimal_action
-                    for act in env.action_space:
-                        if act.name == f"ACTION{act_num}":
                             selected_action = act
                             break
                 else:
@@ -157,7 +156,7 @@ def run_full_25_benchmark():
                 "final_level": getattr(frame, 'level', 0),
                 "elapsed_sec": round(game_elapsed, 3),
                 "fps": round(fps, 1),
-                "invariants_discovered": len(invariants.symmetry_group) if hasattr(invariants, 'symmetry_group') else 4
+                "invariants_discovered": len(invariants.foreground_colors) if hasattr(invariants, 'foreground_colors') else 4
             }
             game_results.append(res)
             logger.info(f"RESULT [{game_id}]: State={res['status']} | Level={res['final_level']} | Steps={res['steps']} | FPS={res['fps']}")
