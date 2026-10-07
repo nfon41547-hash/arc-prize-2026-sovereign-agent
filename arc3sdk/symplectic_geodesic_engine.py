@@ -39,18 +39,117 @@ class ManifoldState5D:
     uncollected_batteries: FrozenSet[Tuple[int, int]] = frozenset()
 
 
+@dataclass(frozen=True)
+class InformationFluxVector:
+    """Discrete spatial Information Flux Vector J_info = ∇ D_KL(P_actual || P_predicted)."""
+    flux_r: float
+    flux_c: float
+    divergence: float
+    is_disconfirmed: bool
+    kl_divergence: float
+
+
+class InformationFluxTracker:
+    """Computes J_info = ∇ D_KL(P_actual || P_predicted) and triggers Active Disconfirmation (∇·J_info != 0)."""
+
+    def __init__(self, divergence_epsilon: float = 1e-4):
+        self.divergence_epsilon = divergence_epsilon
+
+    def compute_flux(
+        self,
+        actual_grid: List[List[int]],
+        predicted_grid: List[List[int]],
+    ) -> InformationFluxVector:
+        """Calculate spatial gradient of predictive discrepancy and evaluate divergence."""
+        if not actual_grid or not predicted_grid or len(actual_grid) != len(predicted_grid):
+            return InformationFluxVector(0.0, 0.0, 0.0, False, 0.0)
+
+        h = len(actual_grid)
+        w = len(actual_grid[0]) if h > 0 else 0
+        if w == 0 or len(predicted_grid[0]) != w:
+            return InformationFluxVector(0.0, 0.0, 0.0, False, 0.0)
+
+        # 1. Pixel-level cross-entropy / categorical discrepancy
+        error_map = [[0.0 for _ in range(w)] for _ in range(h)]
+        total_error = 0.0
+        for r in range(h):
+            for c in range(w):
+                if actual_grid[r][c] != predicted_grid[r][c]:
+                    error_map[r][c] = 1.0
+                    total_error += 1.0
+
+        kl_approx = total_error / max(1.0, float(h * w))
+
+        # 2. Discrete Spatial Gradient: ∇ D_KL = (∂_r D_KL, ∂_c D_KL)
+        grad_r = 0.0
+        grad_c = 0.0
+        for r in range(h - 1):
+            for c in range(w):
+                grad_r += (error_map[r + 1][c] - error_map[r][c])
+
+        for r in range(h):
+            for c in range(w - 1):
+                grad_c += (error_map[r][c + 1] - error_map[r][c])
+
+        grad_r /= max(1.0, float(h * w))
+        grad_c /= max(1.0, float(h * w))
+
+        # 3. Divergence of Information Flux: ∇·J_info = ∂_r J_r + ∂_c J_c
+        div_j = abs(grad_r) + abs(grad_c)
+        is_disconfirmed = div_j > self.divergence_epsilon or kl_approx > 0.0
+
+        return InformationFluxVector(
+            flux_r=grad_r,
+            flux_c=grad_c,
+            divergence=div_j,
+            is_disconfirmed=is_disconfirmed,
+            kl_divergence=kl_approx,
+        )
+
+
 class SymplecticGeodesicWavefrontEngine:
     """Sub-millisecond 5D Manifold Geodesic Wavefront Solver replacing traditional MCTS."""
 
     def __init__(self, wall_penalty: float = 1000.0, step_cost: float = 1.0):
         self.wall_penalty = wall_penalty
         self.step_cost = step_cost
+        self.flux_tracker = InformationFluxTracker()
         self.action_vectors = {
             "UP": (-1, 0, "ACTION1"),
             "DOWN": (1, 0, "ACTION2"),
             "LEFT": (0, -1, "ACTION3"),
             "RIGHT": (0, 1, "ACTION4"),
         }
+
+    def compute_hamiltonian_potential(
+        self,
+        action_name: str,
+        current_state: ManifoldState5D,
+        target_pos: Tuple[int, int],
+        target_shape: int,
+        target_color: int,
+        target_rotation: int,
+        kl_divergence: float = 0.0,
+        lambda_step: float = 1.0,
+        fiber_weights: Tuple[float, float, float] = (1.5, 1.2, 1.0),
+    ) -> float:
+        """Compute Discrete Hamiltonian Potential H(a | S) = D_KL + lambda * C(a) + sum(w_k * dist_Fk)."""
+        dr, dc, _ = self.action_vectors.get(action_name, (0, 0, "ACTION1"))
+        next_r, next_c = current_state.r + dr, current_state.c + dc
+
+        # Base spatial movement cost
+        spatial_dist = abs(next_r - target_pos[0]) + abs(next_c - target_pos[1])
+
+        # Transformation fiber metric distances
+        w_shp, w_col, w_rot = fiber_weights
+        d_shp = 1.0 if current_state.shape_id != target_shape else 0.0
+        d_col = 1.0 if current_state.color_id != target_color else 0.0
+        d_rot = min(abs(current_state.rotation_idx - target_rotation), 4 - abs(current_state.rotation_idx - target_rotation)) / 2.0
+
+        fiber_dist = w_shp * d_shp + w_col * d_col + w_rot * d_rot
+
+        # Hamiltonian: H(a | S)
+        return kl_divergence + lambda_step * (spatial_dist * self.step_cost) + fiber_dist
 
     def compute_eikonal_cost_field(
         self,
