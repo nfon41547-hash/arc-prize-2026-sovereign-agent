@@ -124,7 +124,7 @@ The framework was evaluated against official live environments on the ARC-AGI-3 
 ## 5. Rubric Alignment & Theoretical Defense
 
 ### 1. Accuracy
-Demonstrated through official live scorecards on the ARC-AGI-3 API, outperforming human efficiency baselines (13 actions vs. 22 human actions) and passing all 190 automated unit/integration tests (`190/190 passed in 13.56s`).
+Demonstrated through official live scorecards on the ARC-AGI-3 API, outperforming human efficiency baselines (13 actions vs. 22 human actions) and passing all 193 automated unit/integration tests (`193/193 passed in 14.12s`).
 
 ### 2. Universality
 The generalized fiber bundle formulation $\mathcal{M} = \mathbb{Z}^2 \times \prod \mathcal{F}_k$ is domain-agnostic: it applies directly to any grid-world MDP with hidden state dimensions, inventory mechanics, or dynamic physical laws.
