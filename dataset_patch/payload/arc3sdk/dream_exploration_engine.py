@@ -167,7 +167,9 @@ class DreamExplorationEngine:
                         continue
                     seen_states.add(s_hash)
 
-                    p_score = eval_progress(g_next) + r_step
+                    # Anti-hack length penalty (R3L-v3 & EVS Theorem 1/2)
+                    length_penalty = 0.02 * float(node.depth)
+                    p_score = eval_progress(g_next) + r_step - length_penalty
                     child = BeamNode(
                         grid=g_next,
                         state_hash=s_hash,
