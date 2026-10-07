@@ -1015,6 +1015,30 @@ class SovereignGrandmasterKernel:
                         self.step_record(grid, first_act)
                         return {"action": first_act, "confidence": 0.96, "reason": "agno_offline_bfs_shortest_path"}
 
+                    # Symplectic Geodesic Wavefront Solver (<0.05ms)
+                    try:
+                        from .symplectic_geodesic_engine import SymplecticGeodesicWavefrontEngine
+                        s_gwe = SymplecticGeodesicWavefrontEngine()
+                        wall_set = set(self.game_manual_rules.get("wall_colors", [5, 0]))
+                        goal_set = {int(grid[gy, gx])}
+                        g_flow = s_gwe.solve_geodesic_flow(
+                            grid=grid.tolist(),
+                            player_pos=(int(py), int(px)),
+                            wall_colors=wall_set,
+                            goal_colors=goal_set,
+                        )
+                        if g_flow and g_flow.actions:
+                            act_map = {"UP": 1, "DOWN": 2, "LEFT": 3, "RIGHT": 4}
+                            parsed_plan = [act_map[a] for a in g_flow.actions if a in act_map]
+                            if parsed_plan and parsed_plan[0] in safe_actions:
+                                first_act = parsed_plan[0]
+                                for step in parsed_plan[1:20]:
+                                    self.planned_queue.append(step)
+                                self.step_record(grid, first_act)
+                                return {"action": first_act, "confidence": 0.95, "reason": "sovereign_eikonal_geodesic"}
+                    except Exception:
+                        pass
+
                     dy = gy - py
                     dx = gx - px
                     candidates = []
