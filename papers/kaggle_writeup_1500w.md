@@ -6,6 +6,7 @@
 **Associated Kernel:** `bang1850/arc-agi-3-starter-kernel-v32-profile-3`  
 **Open-Source Repository:** [github.com/nfon41547-hash/arc-prize-2026-sovereign-agent](https://github.com/nfon41547-hash/arc-prize-2026-sovereign-agent)  
 **Evaluation Target:** ARC Prize 2026 Paper Track ($450,000 USD Category)  
+**Official Kaggle Writeup:** [kaggle.com/competitions/arc-prize-2026-paper-track/writeups/new-writeup-1791301459593](https://kaggle.com/competitions/arc-prize-2026-paper-track/writeups/new-writeup-1791301459593)  
 
 ---
 
