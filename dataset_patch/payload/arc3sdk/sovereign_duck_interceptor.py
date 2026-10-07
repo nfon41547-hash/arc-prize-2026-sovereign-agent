@@ -847,6 +847,9 @@ class SovereignDuckInterceptor:
         request_timeout_seconds: float | None = None,
         should_stop: Callable[[], bool] | None = None,
     ) -> Any:
+        if request_timeout_seconds is not None:
+            request_timeout_seconds = max(45.0, float(request_timeout_seconds))
+
         if not state_path.exists() or step_env is None:
             return self.original_analyze(
                 tool_agent_self,

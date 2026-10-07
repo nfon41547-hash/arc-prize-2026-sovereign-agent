@@ -28,9 +28,60 @@ class WorldModelSimulator:
         self.portal_pairs: dict[tuple[int, int], tuple[int, int]] = {}
         # Switches and connected barriers: switch_coord -> list of barrier_coords
         self.switch_barriers: dict[tuple[int, int], list[tuple[int, int]]] = {}
+        # Empirical Kinematic Grounding (Game/Session memory)
+        self.proven_player_color: int | None = None
+        self.proven_goal_colors: set[int] = set()
+        self.proven_pushable_colors: set[int] = set()
+
+    def observe_kinematics(
+        self,
+        grid_before: np.ndarray,
+        action: Any,
+        grid_after: np.ndarray,
+        score_gained: bool = False
+    ) -> None:
+        """Inductively discovers player entity, pushables, and goal sinks from empirical transitions."""
+        if not isinstance(action, int) or action not in self.move_deltas:
+            return
+        if grid_before.shape != grid_after.shape:
+            return
+
+        dy, dx = self.move_deltas[action]
+        h, w = grid_before.shape
+        bg_color = int(np.bincount(grid_before.ravel()).argmax())
+
+        # Check all distinct foreground colors
+        unique_colors = np.unique(grid_before)
+        for c in unique_colors:
+            if c == bg_color:
+                continue
+            coords_b = np.argwhere(grid_before == c)
+            coords_a = np.argwhere(grid_after == c)
+            if len(coords_b) == 0 or len(coords_a) == 0:
+                continue
+
+            # Check if this color component shifted by exactly (dy, dx)
+            if len(coords_b) == len(coords_a):
+                expected = coords_b + np.array([dy, dx])
+                # Filter in-bounds expected
+                in_bounds = (expected[:, 0] >= 0) & (expected[:, 0] < h) & (expected[:, 1] >= 0) & (expected[:, 1] < w)
+                if np.all(in_bounds):
+                    # Sort both to compare sets
+                    exp_sorted = expected[np.lexsort((expected[:, 1], expected[:, 0]))]
+                    act_sorted = coords_a[np.lexsort((coords_a[:, 1], coords_a[:, 0]))]
+                    if np.array_equal(exp_sorted, act_sorted):
+                        # Proven dynamic player movement
+                        self.proven_player_color = int(c)
+
+        if score_gained and self.proven_player_color is not None:
+            # Color under previous player position or vanished target color is a proven goal
+            vanished_colors = set(np.unique(grid_before)) - set(np.unique(grid_after))
+            for vc in vanished_colors:
+                if vc != bg_color and vc != self.proven_player_color:
+                    self.proven_goal_colors.add(int(vc))
 
     def infer_entities(self, grid: np.ndarray, bg_color: int | None = None) -> dict[str, Any]:
-        """Performs deep topological and object-centric segmentation."""
+        """Performs deep topological and object-centric segmentation with Empirical Grounding."""
         if bg_color is None:
             bg_color = int(np.bincount(grid.ravel()).argmax())
 
@@ -38,29 +89,32 @@ class WorldModelSimulator:
         unique_colors = np.unique(grid)
         color_counts = {int(c): int(np.sum(grid == c)) for c in unique_colors if c != bg_color}
 
+        # 1. Use empirically proven player color if present
         player_color = None
-        preferred_players = [8, 1, 2, 4, 3]
-        for pc in preferred_players:
-            if pc in color_counts and 1 <= color_counts[pc] <= 4:
-                player_color = pc
-                break
-
-        if player_color is None and color_counts:
+        if self.proven_player_color is not None and self.proven_player_color in color_counts:
+            player_color = self.proven_player_color
+        elif color_counts:
+            # Fallback: Smallest compact foreground object (inductive heuristic)
             sorted_by_size = sorted(color_counts.items(), key=lambda x: x[1])
-            if sorted_by_size and sorted_by_size[0][1] <= 9:
+            if sorted_by_size:
                 player_color = sorted_by_size[0][0]
 
-        goal_colors = []
-        for gc in [9, 6, 7, 3]:
-            if gc in color_counts and gc != player_color:
-                goal_colors.append(gc)
+        # 2. Goal colors
+        goal_colors = list(self.proven_goal_colors.intersection(color_counts.keys()))
+        if not goal_colors:
+            # Distinct rare colors that aren't the player
+            for c, cnt in color_counts.items():
+                if c != player_color and 1 <= cnt <= 6:
+                    goal_colors.append(c)
 
-        pushable_colors = []
+        # 3. Pushable colors
+        pushable_colors = list(self.proven_pushable_colors.intersection(color_counts.keys()))
         for c, cnt in color_counts.items():
             if c != player_color and c not in goal_colors and 1 <= cnt <= 16:
-                pushable_colors.append(c)
+                if c not in pushable_colors:
+                    pushable_colors.append(c)
 
-        # Detect Portals (exact 2 separate locations of identical rare colors)
+        # 4. Detect Portals (exact 2 separate locations of identical rare colors)
         portals = {}
         for c, cnt in color_counts.items():
             if cnt == 2 and c not in (player_color, *goal_colors):

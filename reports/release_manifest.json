@@ -70,7 +70,7 @@
       "source_module": "arc3sdk/mcts_planner.py"
     },
     {
-      "sha256": "6dc9005226e1ef328db6f04ef164ea9978ab4a8b97c343e003078f39dcaf408b",
+      "sha256": "fb7ccddc85233a8e4aa20acdf80b91f8e711b01f03888bb01a434b52f117b16c",
       "source_module": "arc3sdk/world_model_simulator.py"
     },
     {
