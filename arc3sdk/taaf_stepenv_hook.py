@@ -70,6 +70,7 @@ _MAX_TELEMETRY_GAMES = 64
 # are uncalibrated guesses that cost 9.0->3.01 public, 2.41->0.37 private.
 _SUB_ALLOW_DEFAULT = ("ape", "leap_photographic", "leap_q",
                       "agno_offline_bfs_shortest_path",
+                      "geodesic_", "dream_", "s_gwe_",
                       "skill_matrix_", "arc_color_", "arc_object_",
                       "arc_pattern_", "causal_chain", "fusion_",
                       "cortex_", "world_model", "mcts_", "seg_",

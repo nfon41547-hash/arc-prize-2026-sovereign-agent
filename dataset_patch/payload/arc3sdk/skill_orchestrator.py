@@ -432,6 +432,42 @@ def evaluate_skills(
         except Exception:
             pass
 
+        # 27) symplectic_geodesic_engine (Sub-millisecond Eikonal Geodesic Wavefront Solver)
+        try:
+            if any(a in available for a in [1, 2, 3, 4]):
+                from .symplectic_geodesic_engine import SymplecticGeodesicWavefrontEngine
+                s_gwe = SymplecticGeodesicWavefrontEngine()
+                # Extract non-bg pixels
+                h_g, w_g = g.shape
+                player_pos = None
+                goals = set()
+                walls = set()
+                for r_idx in range(h_g):
+                    for c_idx in range(w_g):
+                        v = int(g[r_idx, c_idx])
+                        if v == bg:
+                            continue
+                        if v in (1, 8, 4) and player_pos is None:
+                            player_pos = (r_idx, c_idx)
+                        elif v in (2, 3, 6, 9):
+                            goals.add(v)
+                        elif v == 5:
+                            walls.add(v)
+                if player_pos and goals:
+                    g_res = s_gwe.solve_geodesic_flow(
+                        grid=g.tolist(),
+                        player_pos=player_pos,
+                        wall_colors=walls,
+                        goal_colors=goals,
+                    )
+                    if g_res and g_res.actions:
+                        first_act = g_res.actions[0]
+                        act_map = {"UP": 1, "DOWN": 2, "LEFT": 3, "RIGHT": 4}
+                        if first_act in act_map and act_map[first_act] in available:
+                            proposals.append((act_map[first_act], None, None, "geodesic_flow", 0.92))
+        except Exception:
+            pass
+
         # Sort by confidence descending, deduplicate, calibrate
         proposals.sort(key=lambda p: -p[4])
         seen: set[tuple[int, int | None, int | None]] = set()

@@ -46,7 +46,7 @@
       "source_module": "arc3sdk/fusion_supremacy.py"
     },
     {
-      "sha256": "fbd5653e6351f63f7ad75803a14befc0d3d035678bd5dfb709c153fd2589db52",
+      "sha256": "731d85d6180cbcba31effde01b7c9042ac43525a20c89c53fd17620c6bc1b420",
       "source_module": "arc3sdk/taaf_stepenv_hook.py"
     },
     {
@@ -110,7 +110,7 @@
       "source_module": "arc3sdk/category_engine.py"
     },
     {
-      "sha256": "a50168e97167b8867fd6bc8b6ef03c4013470f5cfd4ae3ab96dd7cece344fe69",
+      "sha256": "4a36aefb6ef4ba2d3b34c8da39eff1d009cacdc6d8c4032d678957d82ba50496",
       "source_module": "arc3sdk/skill_orchestrator.py"
     },
     {
