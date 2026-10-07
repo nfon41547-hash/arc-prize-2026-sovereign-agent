@@ -116,6 +116,7 @@ MODULE_FILES = [
     "mpc_grounded_debate.py",
     "dream_exploration_engine.py",
     "policy_manifold_reflection.py",
+    "auto_aligned_interface.py",
 ]
 
 PAYLOAD_VERSION = "v28-fuse-1"
