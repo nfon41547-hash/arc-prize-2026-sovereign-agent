@@ -1,0 +1,234 @@
+{
+  "timestamp": "2026-10-07 12:28:29",
+  "total_games": 25,
+  "total_steps": 0,
+  "avg_fps": 0.0,
+  "total_time_sec": 42.619333200000256,
+  "games": [
+    {
+      "game_id": "ls20-9607627b",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "lp85-305b61c3",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "ft09-0d8bbf25",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "dc22-fdcac232",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "sc25-635fd71a",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "cn04-2fe56bfb",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "vc33-5430563c",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "ar25-0c556536",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "re86-8af5384d",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "tn36-ef4dde99",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "bp35-0a0ad940",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "lf52-271a04aa",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "wa30-ee6fef47",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "su15-1944f8ab",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "sb26-7fbdac44",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "sk48-d8078629",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "cd82-fb555c5d",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "s5i5-18d95033",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "m0r0-492f87ba",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "ka59-38d34dbb",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "tu93-0768757b",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "g50t-5849a774",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "r11l-495a7899",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "tr87-cd924810",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    },
+    {
+      "game_id": "sp80-589a99af",
+      "status": "ERROR",
+      "error": "'FrameDataRaw' object has no attribute 'grid'",
+      "steps": 0,
+      "final_level": 0,
+      "elapsed_sec": 0,
+      "fps": 0
+    }
+  ]
+}
