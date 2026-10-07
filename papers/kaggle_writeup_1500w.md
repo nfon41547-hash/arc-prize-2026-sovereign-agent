@@ -12,6 +12,7 @@
 ## 1. Introduction & The Dual-Process Paradigm
 
 Interactive reasoning tasks in ARC-AGI-3 evaluate an agent's ability to acquire unfamiliar operational rules through minimal environment exploration under hidden constraints. Standard reinforcement learning and unconstrained Monte Carlo Tree Search (MCTS) struggle due to three fundamental bottlenecks:
+
 1. **The Spatial Projection Trap (State-Space Drift):** Treating environments purely as 2D spatial matrices $\mathbb{Z}^2$ ignores latent object transformation states (e.g., orientation, active color, shape morphing, inventory), leading agents to oscillate indefinitely over target coordinates without satisfying transition triggers (`GameState.NOT_FINISHED`).
 2. **Hidden Resource Exhaustion:** Undocumented step counters with non-unitary decrement rates ($\Delta E = -\kappa, \kappa \ge 1$) trigger premature `GAME_OVER` states during unguided exploratory random walks.
 3. **The Inference Latency Bottleneck:** Delegating micro-action navigation to auto-regressive LLM generation introduces severe token latency (>5s/step), context-window fragmentation, and prohibitive token expenditure.
@@ -38,6 +39,7 @@ Interactive reasoning tasks in ARC-AGI-3 evaluate an agent's ability to acquire 
 ```
 
 To solve this without domain-specific hardcoding, we present a **Dual-Process Neuro-Symbolic Architecture** (Kahneman System 1 + System 2):
+
 - **System 2 (LLM Latent Rule Inducer):** An auto-regressive model running on a high-throughput speculative serving pipeline (390–470 tok/s) that observes initial exploratory probe steps, deduces unobserved transition mechanics, and parameterizes a generalized **Fiber Bundle Manifold** $\mathcal{M}$.
 - **System 1 (Symplectic Geodesic Wavefront Engine / $\mathcal{S}\text{-GWE}$):** A deterministic Riemannian Eikonal solver that computes optimal action paths across $\mathcal{M}$ in **$<0.05\text{ ms}$ with zero subsequent token consumption**. If an unpredicted transition disconfirms the current manifold topology, execution immediately yields back to System 2 for hypothesis revision.
 
@@ -53,7 +55,7 @@ where $\mathbb{Z}^2 = \{0, \dots, H-1\} \times \{0, \dots, W-1\}$ represents spa
 - $\mathcal{F}_{\text{color}} = \{0, \dots, 9\}$: Discrete palette fiber.
 - $\mathcal{F}_{\text{rot}} = \mathbb{Z}_4$: Discrete orientation group $\{0, 90^\circ, 180^\circ, 270^\circ\}$.
 - $\mathcal{F}_{\text{energy}} = \mathbb{R}^+$: Estimated step budget.
-- $\mathcal{F}_{\text{custom}}$: Dynamically allocated fibers (e.g., momentum vectors $\mathbb{Z}^2$, gravity polarity $\{-1, 1\}$, composite entity masks).
+- $\mathcal{F}_{\text{custom}}$: Dynamically allocated fibers (e.g., momentum vectors, gravity polarity, composite entity masks).
 
 An instantaneous state $S \in \mathcal{M}$ is represented as $S = \langle (r, c), \mathbf{f}, E, \mathcal{B} \rangle$, where $\mathbf{f} \in \prod \mathcal{F}_k$ is the latent fiber vector, $E$ is the remaining energy budget, and $\mathcal{B} \subset \mathbb{Z}^2$ is the set of active replenishment sinks.
 
@@ -62,10 +64,7 @@ A goal sink $T = \langle (r_T, c_T), \mathbf{f}_T \rangle$ acts as an impassable
 $$\Phi(S, T) = \mathbb{I}\left[ (r, c) = (r_T, c_T) \land \mathbf{f} = \mathbf{f}_T \right]$$
 
 System 2 estimates the step consumption rate $\kappa$ from initial transitions $(S_t, a_t, S_{t+1})$:
-$$E_{t+1} = \begin{cases} 
-E_t - \kappa & \text{if } (r_{t+1}, c_{t+1}) \notin \mathcal{B} \\ 
-E_t - \kappa + E_{\text{recharge}} & \text{if } (r_{t+1}, c_{t+1}) \in \mathcal{B} 
-\end{cases}$$
+$$E_{t+1} = \begin{cases} E_t - \kappa & \text{if } (r_{t+1}, c_{t+1}) \notin \mathcal{B} \\ E_t - \kappa + E_{\text{recharge}} & \text{if } (r_{t+1}, c_{t+1}) \in \mathcal{B} \end{cases}$$
 
 To govern the bidirectional boundary between System 1 execution and System 2 reflection, we define the **Information Flux Vector** $\mathbf{J}_{\text{info}}$ as the spatial-semantic gradient of predictive discrepancy:
 $$\mathbf{J}_{\text{info}} = \nabla \mathcal{D}_{\text{KL}}\left( \mathcal{P}_{\text{actual}}(S_{t+1}) \parallel \mathcal{P}_{\text{predicted}}(S_{t+1} \mid S_t, a_t, \mathcal{M}) \right)$$
@@ -77,7 +76,7 @@ Execution immediately halts in System 1 and yields control back to System 2 to u
 ### 2.3 Discrete Symplectic Geodesic Planning ($\mathcal{S}\text{-GWE}$)
 System 1 solves trajectories by propagating analytical Eikonal wavefronts across $\mathcal{M}$. Action transitions minimize the discrete Hamiltonian potential:
 $$\mathcal{H}(a \mid S) = \mathcal{D}_{\text{KL}}\left( \mathcal{P}_{\text{target}} \parallel \mathcal{P}_{\text{current}} \right) + \lambda_{\text{step}} C(a) + \sum_{k} w_k \cdot \text{dist}_{\mathcal{F}_k}(\mathbf{f}_t, \mathbf{f}_T)$$
-where $\text{dist}_{\mathcal{F}_k}$ measures geodesic distance within the discrete transformation fiber.
+where $C(a)$ denotes the baseline physical movement cost, $\lambda_{\text{step}}$ is the step penalty coefficient, and $\text{dist}_{\mathcal{F}_k}(\mathbf{f}_t, \mathbf{f}_T)$ measures geodesic metric distance within the discrete transformation fiber $\mathcal{F}_k$.
 
 ---
 
@@ -86,8 +85,11 @@ where $\text{dist}_{\mathcal{F}_k}$ measures geodesic distance within the discre
 To ensure System 2 can deduce complex manifold topologies within strict competition time limits, we deploy a hardware-accelerated speculative serving pipeline:
 
 1. **Backbone Model:** `Qwen3.8-Flash-Next` quantized to INT4 precision ($W4A16$) via Intel AutoRound.
+
 2. **Speculative Decoding:** Albucino Multi-Token Prediction (MTP) draft engine running NEXTN verification, delivering **390–470 tokens/second** on NVIDIA RTX Pro 6000 (Blackwell 96GB).
+
 3. **Execution Runtime:** Pinned SGLang engine configured with `--mem-fraction-static 0.93`, `--chunked-prefill-size 4096`, and `fp8_e4m3` KV cache quantization to guarantee zero memory fragmentation during multi-hour test rollouts.
+
 4. **Active Disconfirmation Protocol:** Evaluates $\nabla \cdot \mathbf{J}_{\text{info}}$ per action step; anomalous transitions trigger instant sub-millisecond interrupts to dispatch new hypothesis rollouts.
 
 ---
@@ -98,7 +100,7 @@ To ensure System 2 can deduce complex manifold topologies within strict competit
 The framework was evaluated against official live environments on the ARC-AGI-3 API (`https://three.arcprize.org/api`).
 
 | Architecture / Configuration | LS20 L1 Actions | Efficiency Score | Latency per Level | State Termination |
-|---|---|---|---|---|
+| :--- | :---: | :---: | :---: | :---: |
 | **Human Benchmark** | 22 steps | 100.0% | ~45,000 ms | Verified `WIN` |
 | **Pure LLM Auto-Regressive MCTS** | 79 steps | 0.0% (Timeout) | ~8,400 ms | Unstable (`NOT_FINISHED`) |
 | **System 1 Alone (Fixed 2D Grid BFS)** | 46 steps | 22.8% | <0.05 ms | Failed Invariant Match |
@@ -109,15 +111,13 @@ The framework was evaluated against official live environments on the ARC-AGI-3 
 
 ### 4.2 Comprehensive Ablation Analysis
 
-```text
-Ablation Component Removed           Impact on Pass Rate    Failure Mode Observed
-─────────────────────────────────────────────────────────────────────────────────────────────
-(A) Without System 2 Rule Induction       -68.4%            Blind navigation, wrong target fibers
-(B) Without System 1 Geodesic Solver      -54.2%            Token timeout (>240s), context blowup
-(C) Without Fiber Transformation Model     -81.0%            Oscillating on goal (NOT_FINISHED)
-(D) Without Energy Tracker (kappa=1 fixed) -43.5%            Step budget exhaustion (GAME_OVER)
-(E) Full Dual-Process Architecture         100.0% (Baseline)  Optimal Minimal Action Trajectory
-```
+| Ablation Component Removed | Impact on Pass Rate | Failure Mode Observed |
+| :--- | :---: | :--- |
+| **(A) Without System 2 Rule Induction** | -68.4% | Blind navigation, wrong target fibers |
+| **(B) Without System 1 Geodesic Solver** | -54.2% | Token timeout (>240s), context blowup |
+| **(C) Without Fiber Transformation Model** | -81.0% | Oscillating on goal (`NOT_FINISHED`) |
+| **(D) Without Energy Tracker ($\kappa=1$ fixed)** | -43.5% | Step budget exhaustion (`GAME_OVER`) |
+| **(E) Full Dual-Process Architecture** | **100.0% (Baseline)** | **Optimal Minimal Action Trajectory** |
 
 ---
 
@@ -149,4 +149,4 @@ All code, algorithmic engines, benchmark runners, and test suites are released o
 [github.com/nfon41547-hash/arc-prize-2026-sovereign-agent](https://github.com/nfon41547-hash/arc-prize-2026-sovereign-agent)
 
 ---
-**Word Count:** 1,320 words (Within the 1,500-word limit for ARC Prize 2026 Paper Track).
+**Word Count:** 1,290 words (Within the 1,500-word limit for ARC Prize 2026 Paper Track).
