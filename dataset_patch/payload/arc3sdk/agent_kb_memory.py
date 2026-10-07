@@ -99,6 +99,39 @@ class AgentKBMemory:
         self.max_capacity = max_capacity
         self.experiences: Dict[str, StructuredExperience] = {}
         self.gate = DisagreementGate(beta=disagreement_beta)
+        # D4 Canonical Invariant Index: d4_hash -> (action_sequence, domain)
+        self.d4_canonical_index: Dict[str, Tuple[List[Any], str]] = {}
+
+    @staticmethod
+    def compute_d4_canonical_key(grid: np.ndarray) -> str:
+        """Computes a single invariant key across all 8 dihedral transformations (D4 group)."""
+        if grid.size == 0:
+            return ""
+        g = np.asarray(grid, dtype=np.uint8)
+        variants = [g]
+        for k in range(1, 4):
+            variants.append(np.rot90(g, k))
+        variants.append(np.fliplr(g))
+        variants.append(np.flipud(g))
+        if g.shape[0] == g.shape[1]:
+            variants.append(g.T)
+            variants.append(np.fliplr(np.flipud(g)).T)
+        hashes = [hash(v.tobytes()) for v in variants]
+        return f"D4_{min(hashes)}"
+
+    def register_solved_level(self, grid: np.ndarray, actions: List[Any], domain: str = "arc3") -> None:
+        """Stores a proven winning trajectory under its D4-canonical invariant signature."""
+        key = self.compute_d4_canonical_key(grid)
+        if key:
+            self.d4_canonical_index[key] = (list(actions), domain)
+
+    def query_d4_trajectory(self, grid: np.ndarray) -> Optional[List[Any]]:
+        """Instantly retrieves a proven winning action sequence for any D4-symmetric equivalent state."""
+        key = self.compute_d4_canonical_key(grid)
+        if key in self.d4_canonical_index:
+            actions, _ = self.d4_canonical_index[key]
+            return actions
+        return None
 
     def add_experience(
         self,
