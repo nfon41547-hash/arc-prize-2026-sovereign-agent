@@ -71,8 +71,8 @@ When the estimated shortest path cost to $T$ exceeds remaining energy $E_t$, Sys
 
 ### 2.3 Discrete Symplectic Geodesic Planning ($\mathcal{S}\text{-GWE}$)
 System 1 solves trajectories by propagating analytical Eikonal wavefronts across $\mathcal{M}$. Action transitions minimize the discrete Hamiltonian potential:
-$$\mathcal{H}(a \mid S) = \mathcal{D}_{\text{KL}}\left( \mathcal{P}_{\text{target}} \parallel \mathcal{P}_{\text{current}} \right) + \lambda_{\text{step}} C(a) + \sum_{k} w_k \cdot \operatorname{dist}_{\mathcal{F}_k}(\mathbf{f}_t, \mathbf{f}_T)$$
-where $\operatorname{dist}_{\mathcal{F}_k}$ measures geodesic distance within the discrete transformation fiber.
+$$\mathcal{H}(a \mid S) = \mathcal{D}_{\text{KL}}\left( \mathcal{P}_{\text{target}} \parallel \mathcal{P}_{\text{current}} \right) + \lambda_{\text{step}} C(a) + \sum_{k} w_k \cdot \text{dist}_{\mathcal{F}_k}(\mathbf{f}_t, \mathbf{f}_T)$$
+where $\text{dist}_{\mathcal{F}_k}$ measures geodesic distance within the discrete transformation fiber.
 
 ---
 
@@ -83,7 +83,7 @@ To ensure System 2 can deduce complex manifold topologies within strict competit
 1. **Backbone Model:** `Qwen3.8-Flash-Next` quantized to INT4 precision ($W4A16$) via Intel AutoRound.
 2. **Speculative Decoding:** Albucino Multi-Token Prediction (MTP) draft engine running NEXTN verification, delivering **390–470 tokens/second** on NVIDIA RTX Pro 6000 (Blackwell 96GB).
 3. **Execution Runtime:** Pinned SGLang engine configured with `--mem-fraction-static 0.93`, `--chunked-prefill-size 4096`, and `fp8_e4m3` KV cache quantization to guarantee zero memory fragmentation during multi-hour test rollouts.
-4. **Active Disconfirmation Protocol:** If System 1 encounters an unexpected state transition (information flux $\operatorname{div} \mathbf{J}_{\text{info}} \neq 0$), execution halts immediately ($<1\text{ms}$), sending the anomaly delta to System 2 to refine the fiber manifold $\mathcal{M}$.
+4. **Active Disconfirmation Protocol:** If System 1 encounters an unexpected state transition (information flux $\text{div} \mathbf{J}_{\text{info}} \neq 0$), execution halts immediately ($<1\text{ms}$), sending the anomaly delta to System 2 to refine the fiber manifold $\mathcal{M}$.
 
 ---
 
