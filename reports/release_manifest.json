@@ -54,7 +54,7 @@
       "source_module": "arc3sdk/cass_phi.py"
     },
     {
-      "sha256": "4062421990dd6bf352522c72e12353ded8478f076ec95adf6c52d17949b85546",
+      "sha256": "2fab0e8c2f8f0448543f5535942240715a3ff1d5129248dad832b384e4f38ea1",
       "source_module": "arc3sdk/unified_consensus_engine.py"
     },
     {

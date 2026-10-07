@@ -652,6 +652,21 @@ class SovereignGrandmasterKernel:
             if len(self.grid_history) > 0 and self.last_executed_action is not None:
                 self._record_noop_futility(self.grid_history[-1], grid, self.last_executed_action, game_id, current_level)
             try:
+                from .agent_kb_memory import AgentKBMemory
+                # Fast global instance lookup
+                if not hasattr(self, "_agent_kb"):
+                    self._agent_kb = AgentKBMemory()
+                d4_plan = self._agent_kb.query_d4_trajectory(grid)
+                if d4_plan and len(d4_plan) > 0:
+                    first_act = d4_plan[0]
+                    for fut_act in d4_plan[1:]:
+                        self.planned_queue.append(fut_act)
+                    self.step_record(grid, first_act)
+                    return {"action": first_act, "confidence": 0.99, "reason": "agent_kb_d4_invariant_replay"}
+            except Exception:
+                pass
+
+            try:
                 from .sovereign_memory_vram import get_leap_memory
                 leap_mem = get_leap_memory()
                 # Filter available actions against known fatal state transitions
